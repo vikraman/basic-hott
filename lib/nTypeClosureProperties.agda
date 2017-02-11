@@ -1,5 +1,5 @@
 {-# OPTIONS --without-K #-}
-module theorems.nTypeClosureProperties where
+module nTypeClosureProperties where
 
 open import IntensionalTypeTheory
 open import FunctionExtensionality

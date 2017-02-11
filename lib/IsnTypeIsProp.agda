@@ -1,5 +1,5 @@
 {-# OPTIONS --without-K #-}
-module theorems.IsnTypeIsProp where
+module IsnTypeIsProp where
 
 open import IntensionalTypeTheory
 open import FunctionExtensionality

@@ -1,5 +1,5 @@
 {-# OPTIONS --without-K #-}
-module scratch.Dold where
+module Dold where
 
 open import IntensionalTypeTheory
 
@@ -22,8 +22,6 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁}
   
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁}
          {P : X → Type ℓ₂} {Q : X → Type ℓ₂} where
-
-  -- indent to here
 
   thm : (f : (x : X) → P x → Q x) → (is-equiv (lem f)) → (x : X) → P x ≃ Q x
   thm f (g , η , ε , τ) x = fx , qinv-is-equiv (gx , ηx , εx)
