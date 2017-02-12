@@ -137,21 +137,12 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} {Z :
   -● e' = λ e → e ● e'
 
 
--- module _ {ℓ : Level} where
+module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
 
---   ●unitr : {X Y : Type ℓ} → (e : X ≃ Y) → e ● ide X == e
---   ●unitr (f , g , η , ε , τ) = dpair= (refl f ,
---                                dpair= (refl g ,
---                                dpair= ({!!} ,
---                                dpair= ({!!} ,
---                                        {!!}))))
-
-module _ {ℓ : Level} {X : Type ℓ} where
-
-  tpt-eqv : (P : X → Type ℓ) → {x y : X} → x == y → P x ≃ P y
+  tpt-eqv : (P : X → Type ℓ₂) → {x y : X} → x == y → P x ≃ P y
   tpt-eqv P (refl x) = ide (P x)
 
-  is-univ-fib : (P : X → Type ℓ) → Type ℓ
+  is-univ-fib : (P : X → Type ℓ₂) → Type (ℓ₁ ⊔ ℓ₂)
   is-univ-fib P = (x y : X) → is-equiv (tpt-eqv P {x} {y})
 
 
