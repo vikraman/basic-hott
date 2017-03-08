@@ -4,11 +4,11 @@ module UniFibExamples where
 open import UnivalentTypeTheory
 open import PropositionalTruncation
 
-  -- tpt-eqv : (P : X → Type ℓ₂) → {x y : X} → x == y → P x ≃ P y
-  -- tpt-eqv P (refl x) = ide (P x)
 
-  -- is-univ-fib : (P : X → Type ℓ₂) → Type (ℓ₁ ⊔ ℓ₂)
-  -- is-univ-fib P = (x y : X) → is-equiv (tpt-eqv P {x} {y})
+module _ {ℓ : Level} where
+
+  Ω : (X : Type ℓ) → X → Type ℓ
+  Ω X x = x == x 
 
 module _ {ℓ₁ : Level} (X : Type ℓ₁) where
 
@@ -16,6 +16,9 @@ module _ {ℓ₁ : Level} (X : Type ℓ₁) where
 
   pr₁ : BAutX → Type ℓ₁
   pr₁ (Y , q) = Y
+
+  b₀ : BAutX
+  b₀ = X , ∣ ide X ∣
 
   lem1 : {v w : BAutX} → (p : v == w) → p₁ (tpt-eqv pr₁ p) == tpt id (dpair=-e₁ p)
   lem1 (refl v) = refl id
@@ -29,8 +32,8 @@ module _ {ℓ₁ : Level} (X : Type ℓ₁) where
   eqv= {e = e} {e'} φ = dpair= (φ , is-equiv-is-prop _ _ _ )
 
 
-  easy : is-univ-fib pr₁
-  easy (Y , q) (Y' , r) = g , η , ε , τ
+  is-univ-fib-pr₁ : is-univ-fib pr₁
+  is-univ-fib-pr₁ (Y , q) (Y' , r) = g , η , ε , τ
     where g : Y ≃ Y' → Y , q == Y' , r
           g e = dpair= (ua e , identify _ _)
           η : g ∘ tpt-eqv pr₁ ∼ id
@@ -39,3 +42,7 @@ module _ {ℓ₁ : Level} (X : Type ℓ₁) where
           ε e = eqv= (lem1 (dpair= (ua e , identify _ _)) ◾ ap (tpt id) (dpair=-β₁ (ua e , identify _ _)) ◾ ua-β₁ e)
           τ : ap (tpt-eqv pr₁) ∘ η ∼ ε ∘ tpt-eqv pr₁
           τ (refl w) = refl (ap (tpt-eqv pr₁) (η (refl (Y , q)))) ◾ {!!} ◾ refl (ε (ide Y))
+
+
+  easy : (Ω BAutX b₀) ≃ (X ≃ X)
+  easy = tpt-eqv pr₁ , is-univ-fib-pr₁ b₀ b₀
