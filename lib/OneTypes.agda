@@ -9,6 +9,7 @@ open import Equivalences
 open import Zero
 open import One
 open import PathsInOne
+open import PathsInSigma
 
 
 module _ {ℓ : Level} where
