@@ -10,6 +10,9 @@ infixr 30 _==_
 data _==_ {ℓ : Level} {X : Type ℓ} : X → X → Type ℓ where
   refl : (x : X) →  x == x 
 
+==' : {ℓ : Level} → (X : Type ℓ) → X → X → Type ℓ
+==' X x y = _==_ {X = X} x y 
+
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
 
   ind= : (P : {x y : X} → (p : x == y) → Type ℓ₂)
@@ -75,6 +78,11 @@ module _ {ℓ : Level} {X : Type ℓ} where
   !! : {x y : X} → (p : x == y) → ! (! p) == p
   !! (refl x) = refl (refl x)
 
+  !!! : {x y : X} → (p : x == y) → ap ! (!! p) == !! (! p)
+  !!! (refl x) = refl (refl (refl x))
+
+  !◾ : {x y z : X} → (p : x == y) → (q : y == z) → ! (p ◾ q) == ! q ◾ ! p
+  !◾ (refl y) (refl .y) = refl (refl y)
 
 
 module _ {ℓ : Level} {X : Type ℓ} where
@@ -98,6 +106,17 @@ module _ {ℓ : Level} {X : Type ℓ} where
   _[2,1,2]'_ : {x y z : X} → {p q : x == y} → {r s : y == z}
                → p == q → r == s → p ◾ r == q ◾ s
   _[2,1,2]'_ {p = p} {s = s} α β = (p [1,1,2] β) ◾ (α [2,1,1] s)
+
+  pad-sq : {w x y z : X}
+           → {l₁ l₁' : w == x} → {l₂ l₂' : x == z}
+           → {r₁ r₁' : w == y} → {r₂ r₂' : y == z}
+           → (α₁ : l₁ == l₁') → (α₂ : l₂ == l₂')
+           → (β₁ : r₁ == r₁') → (β₂ : r₂ == r₂')
+           → l₁ ◾ l₂ == r₁ ◾ r₂ → l₁' ◾ l₂' == r₁' ◾ r₂'
+  pad-sq α₁ α₂ β₁ β₂ γ = (! α₁ [2,1,2] ! α₂) ◾ γ ◾ (β₁ [2,1,2] β₂)
+
+  =-prsrv-= : {x x' y y' : X} → x == x' → y == y' → (x == y) == (x' == y')
+  =-prsrv-= (refl x) (refl y) = refl (x == y)
 
 
 module _ {ℓ : Level} {X : Type ℓ} where
@@ -124,6 +143,10 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
         → {x y : X} → (p : x == y) → ap (g ∘ f) p == ap g (ap f p)
   ap∘ g f (refl x) = refl (refl (g (f x)))
 
+  ap! : (f : X → Y) → {x y : X} → (p : x == y)
+        → ap f (! p) == ! (ap f p)
+  ap! f (refl x) = refl (refl (f x))
+
 
 module _ {ℓ : Level} {X : Type ℓ} where
 
@@ -134,7 +157,6 @@ module _ {ℓ : Level} {X : Type ℓ} where
 module _ {ℓ : Level} {X : Type ℓ} where
   -- Some derived cancellation rules The expected input path is of
   -- type l₁ ◾ ... ◾ lₘ == r₁ ◾ ... ◾ rₙ .
-  -- TODO: Automate...
 
   -- left cancellation
   refl=!l◾r : {x y : X} → {l r : x == y} → l == r → refl y == ! l ◾ r
@@ -218,23 +240,16 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
          → {x y : Y} → (p : x == y) → tpt (P ∘ f) p == tpt P (ap f p)
   tpt∘ f (refl x) = refl id
 
+  tpt! : {x y : X} → (p : x == y)
+         → (ux : P x) → (uy : P y) → tpt P (! p) uy == ux → tpt P p ux == uy
+  tpt! (refl x) ux uy = ! {x = uy} {ux}
+
 
 module _ {ℓ : Level} where
 
   tpt-id : {X Y : Type ℓ} → (p : X == Y) → tpt id p == coe p
   tpt-id (refl X) = refl id
 
-
--- module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : (x : X) → Type ℓ₂} where
-
---   paths' : ((x : X) → P x) → ((x : X) → P x) → X → Type ℓ₂
---   paths' f g x = f x == g x
-
---   tpt-paths' : {x y : X} → (p : x == y)
---                → (f g : (x : X) → P x)
---                → (q : paths f g x)
---                → tpt (paths f g) p q == ! (ap f p) ◾ q ◾ ap g p 
---   tpt-paths' = {!!}
 
 module _ {ℓ : Level} {X : Type ℓ} where
 
@@ -256,9 +271,6 @@ module _ {ℓ : Level} {X : Type ℓ} where
 
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
-  fib : (X → Y) → Y → Type (ℓ₁ ⊔ ℓ₂)
-  fib f y = Σ X (λ x → f x == y)
-
   paths : (X → Y) → (X → Y) → X → Type ℓ₂
   paths f g x = f x == g x
   
@@ -267,6 +279,9 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   paths-r : (X → Y) → Y → X → Type ℓ₂
   paths-r f y x = f x == y 
+
+  fib : (X → Y) → Y → Type (ℓ₁ ⊔ ℓ₂)
+  fib f y = Σ X (paths-r f y)
 
   tpt-paths : (f g : X → Y)
               → {x y : X} → (p : x == y) → (q : paths f g x)
@@ -284,10 +299,17 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
   tpt-paths-r f (refl x) q = ! (◾unitl _)
 
 
-module _ {ℓ₀ ℓ₁ ℓ₂ : Level} {X : Type ℓ₀} where
+module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} where
 
-  tpt→ : (P : X → Type ℓ₁) → (Q : X → Type ℓ₂)
+  tpt→ : (P : X → Type ℓ₂) → (Q : X → Type ℓ₃)
           → {x y : X} → (p : x == y) → (f : P x → Q x)
           → tpt (λ x → P x → Q x) p f == tpt Q p ∘ f ∘ tpt P (! p)
   tpt→ P Q (refl x) f = refl f
 
+
+module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} {Q : X → Type ℓ₃} where
+
+  tpt-fib-map : (f : (x : X) → P x → Q x)
+                → {x y : X} → (p : x == y) → (ux : P x)
+                → tpt Q p (f x ux) == f y (tpt P p ux)
+  tpt-fib-map f (refl x) ux = refl (f x ux)   

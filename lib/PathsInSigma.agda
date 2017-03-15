@@ -6,6 +6,7 @@ open import Functions
 open import DependentSum
 open import Paths
 open import Homotopies
+open import Equivalences
 
 
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
@@ -98,67 +99,23 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
   -- uniqueness principle for paths of dependent pairs
   dpair=-η : {x y : X} → {ux : P x} → {uy : P y}
             → (p : (x , ux) == (y , uy)) → (dpair= ∘ dpair=-e) p == p
-  dpair=-η (refl (x , y)) = refl (refl (x , y))
+  dpair=-η (refl (x , ux)) = refl (refl (x , ux))
 
 
--- -- -- TODO: Move to exercises
--- -- -- generalization of Thm 2.6.5 to dependent sums
--- -- -- module Thm-2-6-5-Generalized where
+module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
 
--- -- --   lem : {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level}
--- -- --         → {A : Type ℓ₁} → {B : Type ℓ₂} → (f : A → B)
--- -- --         → {A' : A → Type ℓ₃} → {B' : B → Type ℓ₄} → (f' : (u : Σ A A') → B' (f (p₁ u)))
--- -- --         → {v w : Σ A A'} → (p : v == w)
--- -- --         → transport (λ z → B' (f (p₁ z))) p (f' v) == (f' w)
--- -- --         → transport B' (ap f (ap p₁ p)) (f' v) == (f' w)
--- -- --   lem f f' (refl (x , x')) = id
+  paths-in-Σ : (P : X → Type ℓ₂) →
+               {x x' : X} → (y : P x) → (y' : P x')
+               → ((x , y) == (x' , y')) ≃ dpaths P y y'  
+  paths-in-Σ P y y' = dpair=-e , dpair= , dpair=-η , dpair=-β , τ
+    where τ : {x y : X} → {ux : P x} → {uy : P y}
+              → (p : (x , ux) == (y , uy)) → (ap dpair=-e ∘ dpair=-η) p == (dpair=-β ∘ dpair=-e) p
+          τ (refl (x , ux)) = refl (refl (refl x , refl ux))
 
 
--- -- --   dpair=ap : {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level}
--- -- --          → {A : Type ℓ₁} → {B : Type ℓ₂} → (f : A → B)
--- -- --          → {A' : A → Type ℓ₃} → {B' : B → Type ℓ₄} → (f' : (u : Σ A A') → B' (f (p₁ u)))
--- -- --          → {v w : Σ A A'} → (p : v == w)
--- -- --          → ap (Σ→ {A' = A'} {B'} (f , f')) p == dpair= (ap f (ap p₁ p) , lem f f' p (apd f' p))
--- -- --   dpair=ap f f' (refl (x , x')) = refl (refl (f x , f' (x , x')))
+module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} {Q : X → Type ℓ₃} where
 
--- -- -- open Thm-2-6-5-Generalized public using (dpair=ap)
-
-
-
--- Σ→* : {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level}
---        → {A : Type ℓ₁} → {A' : Type ℓ₂} → (f : A → A')
---        → {B : A → Type ℓ₃} → {B' : A' → Type ℓ₄} → (g : (x : A) → B x → B' (f x))
---        → Σ A B → Σ A' B'
--- Σ→* f g (x , y) = f x , g x y
-
--- pair=ap*-com : {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level}
---                → {A : Type ℓ₁} → {A' : Type ℓ₂} → (f : A → A')
---                → {B : A → Type ℓ₃} → {B' : A' → Type ℓ₄} → (g : (x : A) → B x → B' (f x))
---                → {x y : A} → (p : x == y)
---                → {ux : B x} → {uy : B y} → (up : transport B p ux == uy)
---                → transport B' (ap f p) (g x ux) == g y (transport B p ux)
--- pair=ap*-com f g (refl x) (refl ux) = refl (g x ux)
-
--- pair=ap* : {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level}
---            → {A : Type ℓ₁} → {A' : Type ℓ₂} → (f : A → A')
---            → {B : A → Type ℓ₃} → {B' : A' → Type ℓ₄} → (g : (x : A) → B x → B' (f x))
---            → {x y : A} → (p : x == y)
---            → {ux : B x} → {uy : B y} → (up : transport B p ux == uy)
---            → ap (Σ→* f {B} {B'} g) (dpair= {B = B} (p , up))
---               == dpair= {B = B} (ap f p , pair=ap*-com f g p up ◾ ap (g y) up)
--- pair=ap* f g (refl x) (refl ux) = refl (refl (f x , g x ux))           
-
--- pair→' : {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level}
---           → {A : Type ℓ₁} → {A' : Type ℓ₂} → (f : A → A')
---           → {B : A → Type ℓ₃} → {B' : A' → Type ℓ₄} → (g : (w : Σ A B) → B' (f (p₁ w)))
---           → Σ A B → Σ A' B'
--- pair→' f g w = f (p₁ w) , g w
-
--- pair=ap' : {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level}
---            → {A : Type ℓ₁} → {A' : Type ℓ₂} → (f : A → A')
---            → {B : A → Type ℓ₃} → {B' : A' → Type ℓ₄} → (g : (w : Σ A B) → B' (f (p₁ w)))
---            → {v w : Σ A B} → (p : dpaths B (p₂ v) (p₂ w))
---            → ap (pair→' f g) (dpair= {B = B} p)
---               == dpair= {B = B} (ap (f ∘ p₁) (dpair= {B = B} p) , ! (tpt∘ B' (f ∘ p₁) (dpair= p) (g v)) ◾ apd g (dpair= p))
--- pair=ap' f g (refl x , refl ux) = refl (refl (f x , g (x , ux)))
-
+  ap-dpair' : (f : ((x : X) → P x → Q x)) → {x y : X} → (p : x == y)
+              → {ux : P x} → {uy : P y} → (up : tpt P p ux == uy)
+              → ap (dpair→ (id , f)) (dpair= (p , up)) == dpair= (p , tpt-fib-map f p ux ◾ ap (f y) up)
+  ap-dpair' f (refl x) (refl ux) = refl (refl (x , f x ux))

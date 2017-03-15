@@ -5,6 +5,7 @@ open import Type
 open import Functions
 open import DependentSum
 open import Paths
+open import Homotopies
 open import Equivalences
 open import Zero
 open import One
@@ -90,15 +91,6 @@ inhab-prop≃𝟙 x φ =
         adj = λ z → contr-is-set 𝟙-is-contr _ _ _ _
 
 
-
-
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
-
-  retract-preserves-contr : is-retract Y X → is-contr X → is-contr Y
-  retract-preserves-contr (r , s , φ) (x , ψ) =
-    r x , (λ y → ap r (ψ (s y)) ◾ φ y)
-
-
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   logical-eqv : is-prop X → is-prop Y → (X → Y) → (Y → X) → X ≃ Y
@@ -106,3 +98,9 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
     where h = λ x → φ _ _
           k = λ x → ψ _ _
           adj = λ x → prop-is-set ψ _ _ _ _
+
+
+module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+
+  is-contr-fn : (f : X → Y) → Type (ℓ₁ ⊔ ℓ₂)
+  is-contr-fn f = (y : Y) → is-contr (fib f y)

@@ -23,15 +23,6 @@ module _ {ℓ₁ : Level} (X : Type ℓ₁) where
   lem1 : {v w : BAutX} → (p : v == w) → p₁ (tpt-eqv pr₁ p) == tpt id (dpair=-e₁ p)
   lem1 (refl v) = refl id
 
-  is-equiv-is-prop : {ℓ₁ ℓ₂ : Level} → {X : Type ℓ₁} → {Y : Type ℓ₂}
-                     → (f : X → Y) → is-prop (is-equiv f)
-  is-equiv-is-prop = {!!}
-
-  eqv= : {ℓ₁ ℓ₂ : Level} → {X : Type ℓ₁} → {Y : Type ℓ₂}
-         {e e' : X ≃ Y} → p₁ e == p₁ e' → e == e'
-  eqv= {e = e} {e'} φ = dpair= (φ , is-equiv-is-prop _ _ _ )
-
-
   is-univ-fib-pr₁ : is-univ-fib pr₁
   is-univ-fib-pr₁ (Y , q) (Y' , r) = g , η , ε , τ
     where g : Y ≃ Y' → Y , q == Y' , r

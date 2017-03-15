@@ -3,7 +3,14 @@ module nTypeClosureProperties where
 
 open import IntensionalTypeTheory
 open import FunctionExtensionality
+open import IsnTypeIsProp
 
+
+module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+
+  retract-prsrv-contr : is-retract Y X → is-contr X → is-contr Y
+  retract-prsrv-contr (r , s , φ) (x , ψ) =
+    r x , (λ y → ap r (ψ (s y)) ◾ φ y)
 
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
 
@@ -72,3 +79,10 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
           h' = happly p'
           H : h ∼ h'
           H x = w x (f x) (f' x) (h x) (h' x)         
+
+
+module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+
+  is-contr-fn-is-prop : (f : X → Y) → is-prop (is-contr-fn f)
+  is-contr-fn-is-prop f φ ψ = contr-is-prop (Π-prsrv-contr ρ) φ ψ
+    where ρ = (λ y → φ y , is-contr-is-prop _ _)

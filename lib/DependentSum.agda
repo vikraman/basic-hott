@@ -27,8 +27,16 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂
   indΣ Q f (x , ux) = f x ux
 
   Σ-unv-prp : {Y : Type ℓ₃}
-              → Σ (Y → X) (λ f → (y : Y) → P ∘ f $ y) → Y → Σ X P
+              → Σ (Y → X) (λ f → (y : Y) → P (f y)) → Y → Σ X P
   Σ-unv-prp (f , g) y = f y , g y
+
+
+module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂}
+         {Q : (x : X) → P x → Type ℓ₃} where
+
+  Σ-unv-prp' : Σ ((x : X) → P x) (λ f → (x : X) → Q x (f x))
+               → (x : X) → Σ (P x) (Q x)
+  Σ-unv-prp' (f , g) x = f x , g x
 
 
 module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where

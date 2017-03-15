@@ -19,3 +19,5 @@ open import OneTypes public
 open import PathsInSigma public
 open import PathsInOne public
 
+open import VariousEquivalences public
+

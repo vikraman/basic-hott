@@ -6,7 +6,6 @@ open import Functions
 open import DependentSum
 open import Paths
 open import Homotopies
-open import PathsInSigma
 
 
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
@@ -82,6 +81,9 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
   qinv-is-hae {f = f} (g , η , ε) = g , η , ε' , τ
     where ε' = qinv-is-hae-ε f (g , η , ε)
           τ  = qinv-is-hae-τ f (g , η , ε)
+
+  hae-is-qinv : {f : X → Y} → is-hae f → is-qinv f
+  hae-is-qinv (g , η , ε , τ) = g , η , ε
 
 
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
@@ -189,3 +191,9 @@ module _ {ℓ₁ ℓ₂ : Level} where
 
   is-retract : (Y : Type ℓ₁) → (X : Type ℓ₂) → Type (ℓ₁ ⊔ ℓ₂)
   is-retract Y X = Σ (X → Y) is-retraction
+
+
+module _ {ℓ₁ ℓ₂ : Level} where
+
+  equiv-is-retract : {X : Type ℓ₁} → {Y : Type ℓ₂} → X ≃ Y → is-retract Y X
+  equiv-is-retract (f , g , η , ε , τ) = f , g , ε

@@ -26,3 +26,9 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂
          → ((f : (x : X) → P x) → Q (idh f))
          → {f g : (x : X) → P x} → (φ : f ∼ g) → Q φ
   ind∼ Q f = (λ {φ} → tpt Q (funext-β φ)) ∘ ind= (Q ∘ happly) f ∘ funext
+
+
+module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
+
+  funext-idh : (f : (x : X) → P x) → funext (idh f) == refl f
+  funext-idh f = funext-η (refl f)
