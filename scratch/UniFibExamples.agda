@@ -54,15 +54,23 @@ module _ where
   Ω[2]≃Aut𝟚 = ΩBAut≃Aut 𝟚
 
 
+𝟚-is-set : is-set 𝟚
+𝟚-is-set = retract-prsrv-set (equiv-is-retract 𝟙+𝟙≃𝟚)
+                             (+-prsrv-set (contr-is-set 𝟙-is-contr)
+                                          (contr-is-set 𝟙-is-contr))
+
 module AutBoolClassification where
 
   data Perm₁ : Type₀ where
     idₚ : Perm₁
     notₚ : Perm₁
 
-  f : Perm₁ → ∥ 𝟚 ≃ 𝟚 ∥₀
-  f idₚ = ∣ ide 𝟚 ∣₀
-  f notₚ = ∣ not-eqv ∣₀
+  Aut𝟚-is-set : is-set (𝟚 ≃ 𝟚)
+  Aut𝟚-is-set = eqv-prsrv-set 𝟚-is-set
 
-  thm1 : ∥ 𝟚 ≃ 𝟚 ∥₀ ≃ Perm₁
+  f : Perm₁ → 𝟚 ≃ 𝟚
+  f idₚ = ide 𝟚
+  f notₚ = not-eqv
+
+  thm1 : 𝟚 ≃ 𝟚 ≃ Perm₁
   thm1 = {!!}
