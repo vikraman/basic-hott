@@ -14,8 +14,11 @@ open import NaturalNumbers public
 open import Paths public
 open import Homotopies public
 open import Equivalences public
+open import ContractibleFunctions public
 
 open import OneTypes public
+open import nTypes public
+
 open import PathsInSigma public
 open import PathsInOne public
 

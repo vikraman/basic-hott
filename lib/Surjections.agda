@@ -2,8 +2,6 @@
 module Surjections where
 
 open import IntensionalTypeTheory
-
-open import OneTypes
 open import PropositionalTruncation
 
 

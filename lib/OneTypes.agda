@@ -4,6 +4,7 @@ module OneTypes where
 open import Type
 open import Functions
 open import DependentSum
+open import Coproduct
 open import Paths
 open import Homotopies
 open import Equivalences
@@ -11,6 +12,7 @@ open import Zero
 open import One
 open import PathsInOne
 open import PathsInSigma
+open import PathsInCoproduct
 
 
 module _ {ℓ : Level} where
@@ -81,16 +83,6 @@ module _ where
 𝟙-is-contr = 0₁ , 𝟙-has-one-elem _
 
 
-inhab-prop≃𝟙 : {ℓ : Level} → {X : Type ℓ} → (x : X) → is-prop X → X ≃ 𝟙
-inhab-prop≃𝟙 x φ =
-  f , g , h , k , adj
-  where f = λ z → 0₁
-        g = λ z → x
-        h = φ x
-        k = λ z → 𝟙-has-one-elem _ _
-        adj = λ z → contr-is-set 𝟙-is-contr _ _ _ _
-
-
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   logical-eqv : is-prop X → is-prop Y → (X → Y) → (Y → X) → X ≃ Y
@@ -100,7 +92,50 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
           adj = λ x → prop-is-set ψ _ _ _ _
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
 
-  is-contr-fn : (f : X → Y) → Type (ℓ₁ ⊔ ℓ₂)
-  is-contr-fn f = (y : Y) → is-contr (fib f y)
+  ×-prsrv-contr : {Y : Type ℓ₂} → is-contr X → is-contr Y → is-contr (X × Y)
+  ×-prsrv-contr (x , f) (y , g) = (x , y) , (λ w → pair= (f (p₁ w) , g (p₂ w)))
+  
+  Σ-prsrv-contr : {P : X → Type ℓ₂}
+                  → is-contr X → ((x : X) → is-contr (P x)) → is-contr (Σ X P)
+  Σ-prsrv-contr {P} (x , f) g = (x , p₁ (g x)) , φ
+    where φ : (w : Σ X P) → x , p₁ (g x) == w
+          φ (x' , ux') = dpair= (f x' , ! (p₂ (g x') (tpt P (f x') (p₁ (g x))))
+                                        ◾ (p₂ (g x')) ux')
+
+  ×-prsrv-prop : {Y : Type ℓ₂} → is-prop X → is-prop Y → is-prop (X × Y)
+  ×-prsrv-prop f g (x , y) (x' , y') = pair= (f x x' , g y y')
+  
+  Σ-prsrv-prop : {P : X → Type ℓ₂}
+                 → is-prop X → ((x : X) → is-prop (P x)) → is-prop (Σ X P)
+  Σ-prsrv-prop f g (x , y) (x' , y') = dpair= (f x x' , g _ _ _)
+
+  ×-prsrv-set : {Y : Type ℓ₂} → is-set X → is-set Y → is-set (X × Y)
+  ×-prsrv-set f g (x , y) (x' , y') w w' =
+    ! (pair=-η w) ◾ ap pair= (pair= (α , β)) ◾ pair=-η w' 
+    where p  = ap p₁ w
+          q  = ap p₂ w
+          p' = ap p₁ w'
+          q' = ap p₂ w'
+          α  = f x x' p p'
+          β  = g y y' q q'
+
+  Σ-prsrv-set : {P : X → Type ℓ₂}
+                 → is-set X → ((x : X) → is-set (P x)) → is-set (Σ X P)
+  Σ-prsrv-set {P = P} f g (x , y) (x' , y') w w' =
+    ! (dpair=-η w) ◾ ap dpair= (dpair= (α , β)) ◾ dpair=-η w'
+    where p  = dpair=-e₁ w
+          q  = dpair=-e₂ w
+          p' = dpair=-e₁ w'
+          q' = dpair=-e₂ w'
+          α  = f x x' p p'
+          β  = g x' (tpt P p' y) y'
+                 (tpt (λ p → tpt P p y == y') α q) q'
+
+  +-prsrv-set : {Y : Type ℓ₂} → is-set X → is-set Y → is-set (X + Y)
+  +-prsrv-set φ ψ (i₁ x) (i₁ x') p q = ! (i₁=-η p) ◾ ap i₁= (φ _ _ _ _) ◾ i₁=-η q
+  +-prsrv-set φ ψ (i₁ x) (i₂ y ) ()
+  +-prsrv-set φ ψ (i₂ y) (i₁ x ) ()
+  +-prsrv-set φ ψ (i₂ y) (i₂ y') p q = ! (i₂=-η p) ◾ ap i₂= (ψ _ _ _ _) ◾ i₂=-η q
+

@@ -1,14 +1,20 @@
 {-# OPTIONS --without-K #-}
-
 module VariousEquivalences where
+
 
 open import Type
 open import Functions
 open import DependentSum
+open import Coproduct
 open import Paths
 open import Homotopies
 open import Equivalences
+open import One
+open import Two
 open import PathsInSigma
+open import PathsInOne
+open import OneTypes
+open import nTypes
 
 
 module _ {ℓ : Level} {X : Type ℓ} where
@@ -109,3 +115,67 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
           τ : ap f ∘ η ∼ ε ∘ f
           τ (x , ux) = ap-dpair' f' (refl x) (η' x ux)
                        ◾ ap dpair= (dpair= (refl (refl x) , ◾unitl _ ◾ τ' x ux))
+
+
+𝟙+𝟙≃𝟚 : 𝟙 + 𝟙 ≃ 𝟚
+𝟙+𝟙≃𝟚 = f , g , η , ε , τ
+  where f : 𝟙 + 𝟙 → 𝟚
+        f (i₁ x) = 0₂
+        f (i₂ y) = 1₂
+        g : 𝟚 → 𝟙 + 𝟙
+        g 0₂ = i₁ 0₁
+        g 1₂ = i₂ 0₁
+        η : g ∘ f ∼ id
+        η (i₁ 0₁) = refl (i₁ 0₁)
+        η (i₂ 0₁) = refl (i₂ 0₁)
+        ε : f ∘ g ∼ id
+        ε 0₂ = refl 0₂
+        ε 1₂ = refl 1₂
+        τ : ap f ∘ η ∼ ε ∘ f
+        τ (i₁ 0₁) = refl (refl 0₂)
+        τ (i₂ 0₁) = refl (refl 1₂)
+
+
+not-is-equiv : is-equiv not
+not-is-equiv = not , η , η , τ
+  where η : not ∘ not ∼ id
+        η 0₂ = refl 0₂
+        η 1₂ = refl 1₂
+        τ : ap not ∘ η ∼ η ∘ not
+        τ 0₂ = refl (refl 1₂)
+        τ 1₂ = refl (refl 0₂)
+
+not-eqv : 𝟚 ≃ 𝟚
+not-eqv = (not , not-is-equiv)
+
+
+module _ {ℓ : Level} {X : Type ℓ} where
+
+  inhab-prop≃𝟙 : (x : X) → is-prop X → X ≃ 𝟙
+  inhab-prop≃𝟙 x φ = f , g , η , ε , τ
+    where f = λ z → 0₁
+          g = λ z → x
+          η = φ x
+          ε = λ z → 𝟙-has-one-elem _ _
+          τ = λ z → contr-is-set 𝟙-is-contr _ _ _ _
+
+
+module _ {ℓ : Level} {X Y : Type ℓ} where
+
+  coprod≃Σ𝟚 : X + Y ≃ Σ 𝟚 (rec𝟚 (Type ℓ) X Y)
+  coprod≃Σ𝟚 = f , g , η , ε , τ
+    where f : X + Y → Σ 𝟚 (rec𝟚 (Type ℓ) X Y)
+          f (i₁ x) = 0₂ , x
+          f (i₂ y) = 1₂ , y
+          g : Σ 𝟚 (rec𝟚 (Type ℓ) X Y) → X + Y
+          g (0₂ , x) = i₁ x
+          g (1₂ , y) = i₂ y
+          η : g ∘ f ∼ id
+          η (i₁ x) = refl (i₁ x)
+          η (i₂ y) = refl (i₂ y)
+          ε : f ∘ g ∼ id
+          ε (0₂ , x) = refl (0₂ , x)
+          ε (1₂ , y) = refl (1₂ , y)
+          τ : ap f ∘ η ∼ ε ∘ f
+          τ (i₁ x) = refl (refl (0₂ , x))
+          τ (i₂ y) = refl (refl (1₂ , y))

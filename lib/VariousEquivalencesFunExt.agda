@@ -1,13 +1,7 @@
 {-# OPTIONS --without-K #-}
+module VariousEquivalencesFunExt where
 
-module EquivalencesUsingFunext where
-
-open import Type
-open import Functions
-open import DependentSum
-open import Paths
-open import Homotopies
-open import Equivalences
+open import IntensionalTypeTheory
 open import FunctionExtensionality
 
 
