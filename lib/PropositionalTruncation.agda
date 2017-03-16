@@ -25,8 +25,19 @@ module _ {ℓ₁ : Level} where
              → (X → Y) → is-prop Y → ∥ X ∥ → Y
   recTrunc Y f φ #∣ x ∣ = f x
 
+  postulate
+    recTrunc-β : {ℓ₂ : Level} → {X : Type ℓ₁} → (Y : Type ℓ₂)
+                 → (f : X → Y) → (φ : is-prop Y)
+                 → {x x' : ∥ X ∥} → ap (recTrunc Y f φ) (identify x x') ==
+                                     φ (recTrunc Y f φ x) (recTrunc Y f φ x')
+
   indTrunc : {ℓ₂ : Level} → {X : Type ℓ₁} → (P : ∥ X ∥ → Type ℓ₂)
-             → (f : (x : X) → P ∣ x ∣) → (φ : (x : X) → is-prop (P ∣ x ∣))
+             → ((x : X) → P ∣ x ∣) → ((x : ∥ X ∥) → is-prop (P x))
              → (x : ∥ X ∥) → P x
   indTrunc P f φ #∣ x ∣ = f x
-
+  
+  indTrunc' : {ℓ₂ : Level} → {X : Type ℓ₁} → (P : ∥ X ∥ → Type ℓ₂)
+              → (f : (x : X) → P ∣ x ∣)
+              → (φ : (x y : ∥ X ∥) → {ux : P x} → {uy : P y} → tpt P (identify x y) ux == uy)
+              → (x : ∥ X ∥) → P x
+  indTrunc' P f φ #∣ x ∣ = f x

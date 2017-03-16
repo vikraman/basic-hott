@@ -229,6 +229,11 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
         → {x y : X} → (p : x == y) → tpt P p (f x) == f y
   apd P f (refl x) = refl (f x)
 
+  apd₂ : (P : X → Type ℓ₂) → (f : (x : X) → P x)
+         → {x y : X} → {p q : x == y} → (α : p == q)
+         → apd P f p == ap (λ p → tpt P p (f x)) α ◾ apd P f q
+  apd₂ P f (refl p) = ! (◾unitl _)
+
 
 module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
 
