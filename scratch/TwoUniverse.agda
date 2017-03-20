@@ -27,10 +27,35 @@ El[𝟚] X = 𝟚
 `not : `𝟚 == `𝟚
 `not = dpair= (ua not-eqv , identify _ _)
 
+not∘not=id : not ∘ not == id
+not∘not=id = funext λ { 0₂ → refl 0₂ ; 1₂ → refl 1₂ }
+
+note●note=ide : not-eqv ● not-eqv == ide 𝟚
+note●note=ide = dpair= ( not∘not=id , dpair= ( {!!} , dpair= ( {!!} , dpair= ({!!} , {!!}))))
+
+notp◾notp=refl : ua not-eqv ◾ ua not-eqv == refl 𝟚
+notp◾notp=refl = ! (ua-● not-eqv not-eqv)
+               ◾ ap ua note●note=ide
+               ◾ ua-ide 𝟚
+
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {P : X → Type ℓ₂} where
+
+  tpt◾↓ : {x y z : X} {u : P x} {v : P y} {w : P z}
+        → (p : x == y) (r : tpt P p u == v)
+        → (q : y == z) (s : tpt P q v == w)
+        → tpt P (p ◾ q) u == w
+  tpt◾↓ (refl x) (refl p) (refl .x) (refl .p) = refl p
+
+  dpair=◾ : {x y z : X} {u : P x} {v : P y} {w : P z}
+          → (p : x == y) (r : tpt P p u == v)
+          → (q : y == z) (s : tpt P q v == w)
+          → dpair= (p , r) ◾ dpair= (q , s) == dpair= (p ◾ q , tpt◾↓ p r q s)
+  dpair=◾ (refl x) (refl p) (refl .x) (refl .p) = refl (refl (x , p))
+
+
 `ρ : `not ◾ `not == `id
-`ρ = {!!}
-
-
+`ρ = dpair=◾ (ua not-eqv) {!!} (ua not-eqv) {!!}
+   ◾ {!!}
 
 module _ {ℓ : Level} {X : Type ℓ} where
 
