@@ -31,7 +31,7 @@ not∘not=id : not ∘ not == id
 not∘not=id = funext λ { 0₂ → refl 0₂ ; 1₂ → refl 1₂ }
 
 note●note=ide : not-eqv ● not-eqv == ide 𝟚
-note●note=ide = dpair= ( not∘not=id , dpair= ( {!!} , dpair= ( {!!} , dpair= ({!!} , {!!}))))
+note●note=ide = eqv= not∘not=id
 
 notp◾notp=refl : ua not-eqv ◾ ua not-eqv == refl 𝟚
 notp◾notp=refl = ! (ua-● not-eqv not-eqv)
@@ -54,8 +54,8 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {P : X → Type ℓ₂} where
 
 
 `ρ : `not ◾ `not == `id
-`ρ = dpair=◾ (ua not-eqv) {!!} (ua not-eqv) {!!}
-   ◾ {!!}
+`ρ = dpair=◾ (ua not-eqv) (identify _ _) (ua not-eqv) (identify _ _)
+     ◾ ap dpair= (dpair= (notp◾notp=refl , prop-is-set identify _ _ _ _))
 
 module _ {ℓ : Level} {X : Type ℓ} where
 
