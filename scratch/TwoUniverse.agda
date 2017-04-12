@@ -67,9 +67,34 @@ module _ {ℓ : Level} {X : Type ℓ} where
     where f : x == x' → ∥ (x , y) == (x' , y') ∥
           f p = ∣ dpair= (p , φ x' (tpt P p y) y') ∣
 
+module ComputationalProperties where
+
+  coe[𝟚] : (p : `𝟚 == `𝟚) → El[𝟚] `𝟚 → El[𝟚] `𝟚
+  coe[𝟚] p = {!!}
+
+  `id-β : (x : El[𝟚] `𝟚) → coe[𝟚] `id x == x
+  `id-β 0₂ = {!!}
+  `id-β 1₂ = {!!}
+
+  `not-β : (x : El[𝟚] `𝟚) → coe[𝟚] `not x == not x
+  `not-β 0₂ = {!!}
+  `not-β 1₂ = {!!}
 
 module ZeroDimensionalTerms where
 
   -- TODO: generalize to any singleton subuniverse (trivial)
   sing-path-conn : (x : U[𝟚]) → ∥ x == `𝟚 ∥
   sing-path-conn (X , p) = lem1 is-𝟚 (λ p → identify) p ∣ refl 𝟚 ∣ p
+
+module OneDimensionalTerms where
+
+  all-1-paths : (p : `𝟚 == `𝟚) → ∥ (p == `id) + (p == `not) ∥
+  all-1-paths p = {!!}
+
+module TwoDimensionalTerms where
+
+  all-2-paths-id : (u : `id == `id) → ∥ u == refl `id ∥
+  all-2-paths-id = {!!}
+
+  all-2-paths-not : (u : `not == `not) → ∥ u == refl `not ∥
+  all-2-paths-not = {!!}
