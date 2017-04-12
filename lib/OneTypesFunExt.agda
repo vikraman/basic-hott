@@ -5,7 +5,7 @@ open import IntensionalTypeTheory
 open import FunctionExtensionality
 
 
-module _ {ℓ : Level} where
+module _ {ℓ} where
 
   is-contr-is-prop : (X : Type ℓ) → is-prop (is-contr X)
   is-contr-is-prop X (x , φ) (y , ψ) =
@@ -24,7 +24,7 @@ module _ {ℓ : Level} where
                          set-is-1type φ _ _ _ _ _ _))))
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
   Π-prsrv-contr : {P : X → Type ℓ₂}
                   → ((x : X) → is-contr (P x)) → is-contr (Π X P)
@@ -48,7 +48,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
           H x = w x (f x) (f' x) (h x) (h' x)         
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   is-contr-fn-is-prop : (f : X → Y) → is-prop (is-contr-fn f)
   is-contr-fn-is-prop f φ ψ = contr-is-prop (Π-prsrv-contr ρ) φ ψ

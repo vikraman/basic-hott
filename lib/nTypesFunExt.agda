@@ -7,7 +7,7 @@ open import OneTypesFunExt
 open import IsEquivIsProp
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   eqv-prsrv-prop : is-prop Y → is-prop (X ≃ Y)
   eqv-prsrv-prop φ (f , e) (f' , e') = eqv= (funext (λ x → φ (f x) (f' x)))

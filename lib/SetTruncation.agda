@@ -6,7 +6,7 @@ open import Paths
 open import OneTypes
 
 
--- module _ {ℓ₁ : Level} where
+-- module _ {ℓ₁} where
 
 --   private
 --     data #ParallelPair : Type ℓ₁ where
@@ -24,7 +24,7 @@ open import OneTypes
 
 
 
-module _ {ℓ₁ : Level} where
+module _ {ℓ₁} where
 
   private
     data #∥_∥₀ (X : Type ℓ₁) : Type ℓ₁ where

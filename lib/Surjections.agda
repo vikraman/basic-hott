@@ -5,12 +5,12 @@ open import IntensionalTypeTheory
 open import PropositionalTruncation
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   is-surj : (X → Y) → Type (ℓ₁ ⊔ ℓ₂)
   is-surj f = (y : Y) → ∥ fib f y ∥
 
--- module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+-- module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
 --   embed-fib-is-prop : (f : X → Y) → is-embed f → (y : Y) → is-prop (fib f y)
 --   embed-fib-is-prop f φ y = {!!}
@@ -28,7 +28,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
 --           h y = recTrunc (fib f y) id (λ v w → dpair= (g' _ _ (p₂ v ◾ ! (p₂ w)) , tpt-paths-r f (g' _ _ (p₂ v ◾ ! (p₂ w))) (p₂ v) ◾ {!!}))
 
 
--- module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+-- module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
 --   is-inj : is-set X → is-set Y → (X → Y) → Type (ℓ₁ ⊔ ℓ₂)
 --   is-inj φ ψ f = (x y : X) → f x == f y → x == y 

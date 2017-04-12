@@ -93,10 +93,15 @@ module _ {ℓ} {X : Type ℓ} where
 
 module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
-  PathOver-=-eqv : {f g : X → Y} → {x x' : X} → {p : x == x'}
+  out-PathOver= : {f g : X → Y} → {x x' : X} → {p : x == x'}
+                   → {ux : f x == g x} → {ux' : f x' == g x'}
+                   → PathOver (paths f g) p ux ux' → Square ux (ap f p) (ap g p) ux'
+  out-PathOver= = {!!}
+  
+  PathOver=-eqv : {f g : X → Y} → {x x' : X} → {p : x == x'}
                    → {ux : f x == g x} → {ux' : f x' == g x'}
                    → PathOver (paths f g) p ux ux' ≃ Square ux (ap f p) (ap g p) ux'
-  PathOver-=-eqv = {!!}
+  PathOver=-eqv = out-PathOver= , {!!}
 
 
 module _ {ℓ} {X : Type ℓ} where
@@ -111,8 +116,8 @@ module _ {ℓ} {X : Type ℓ} where
 module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   ap-square : (f : X → Y) → {x00 x01 x10 x11 : X}
-              → (l : x00 == x01) → (t : x00 == x10)
-              → (b : x01 == x11) → (r : x10 == x11)
+              → {l : x00 == x01} → {t : x00 == x10}
+              → {b : x01 == x11} → {r : x10 == x11}
               → Square l t b r → Square (ap f l) (ap f t) (ap f b) (ap f r)
   ap-square = {!!}
 
@@ -172,11 +177,18 @@ module _ {ℓ} {X : Type ℓ} where
 
 module _ {ℓ} {X : Type ℓ} where
 
+  square-symmetry : {x00 x01 x10 x11 : X}
+                    → {l : x00 == x01} → {t : x00 == x10}
+                    → {b : x01 == x11} → {r : x10 == x11}
+                    → Square l t b r → Square t l r b
+  square-symmetry = {!!}
+
+
   square-symmetry-eqv : {x00 x01 x10 x11 : X}
                         → {l : x00 == x01} → {t : x00 == x10}
                         → {b : x01 == x11} → {r : x10 == x11}
                         → Square l t b r ≃ Square t l r b
-  square-symmetry-eqv = {!!}
+  square-symmetry-eqv = square-symmetry , {!!}
   
   fill-square-right : {x00 x01 x10 x11 : X}
                       → {l : x00 == x01} → {t : x00 == x10}
@@ -210,7 +222,216 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 --                             V. Cubes
 ----------------------------------------------------------------------
 
--- module _ {ℓ} {X : Type ℓ} where
+module _ {ℓ} {X : Type ℓ} where
 
---   data Cube {x000 : X} : {x010 x100 x110 x001 x011 x101 x111 : X}
---                          → {p0-0 : x000 == x010}
+  data Cube {x000 : X} : {x010 x100 x110 x001 x011 x101 x111 : X}
+                         → {p0-0 : x000 == x010} → {p-00 : x000 == x100}
+                         → {p-10 : x010 == x110} → {p1-0 : x100 == x110}
+                         → Square p0-0 p-00 p-10 p1-0
+                         → {p0-1 : x001 == x011} → {p-01 : x001 == x101}
+                         → {p-11 : x011 == x111} → {p1-1 : x101 == x111}
+                         → Square p0-1 p-01 p-11 p1-1
+                         → {p00- : x000 == x001} → {p01- : x010 == x011}
+                         → {p10- : x100 == x101} → {p11- : x110 == x111}
+                         → Square p0-0 p00- p01- p0-1
+                         → Square p-00 p00- p10- p-01
+                         → Square p-10 p01- p11- p-11
+                         → Square p1-0 p10- p11- p1-1
+                         → Type ℓ where
+            reflcube : Cube reflsq reflsq reflsq reflsq reflsq reflsq
+
+  _◾-cube-h_ : {x000 x010 x100 x110 x001 x011 x101 x111 x002 x012 x102 x112 : X}
+               → {p0-0 : x000 == x010} → {p-00 : x000 == x100}
+               → {p-10 : x010 == x110} → {p1-0 : x100 == x110}
+               → {left : Square p0-0 p-00 p-10 p1-0}
+               → {p0-1 : x001 == x011} → {p-01 : x001 == x101}
+               → {p-11 : x011 == x111} → {p1-1 : x101 == x111}
+               → {right : Square p0-1 p-01 p-11 p1-1}
+               → {p00- : x000 == x001} → {p01- : x010 == x011}
+               → {p10- : x100 == x101} → {p11- : x110 == x111}
+               → {back : Square p0-0 p00- p01- p0-1}
+               → {top : Square p-00 p00- p10- p-01}
+               → {bottom : Square p-10 p01- p11- p-11}
+               → {front : Square p1-0 p10- p11- p1-1}
+               → {p0-2 : x002 == x012} → {p-02 : x002 == x102}
+               → {p-12 : x012 == x112} → {p1-2 : x102 == x112}
+               → {right' : Square p0-2 p-02 p-12 p1-2}
+               → {p00-' : x001 == x002} → {p01-' : x011 == x012}
+               → {p10-' : x101 == x102} → {p11-' : x111 == x112}
+               → {back' : Square p0-1 p00-' p01-' p0-2}
+               → {top' : Square p-01 p00-' p10-' p-02}
+               → {bottom' : Square p-11 p01-' p11-' p-12}
+               → {front' : Square p1-1 p10-' p11-' p1-2}
+               → Cube left right back top bottom front
+               → Cube right right' back' top' bottom' front'
+               → Cube left right' (back ◾-square-h back') (top ◾-square-h top')
+                      (bottom ◾-square-h bottom') (front ◾-square-h front')
+  _◾-cube-h_ = {!!}
+
+
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
+
+  ap-cube : (f : X → Y)
+            → {x000 x010 x100 x110 x001 x011 x101 x111 : X}
+            → {p0-0 : x000 == x010} → {p-00 : x000 == x100}
+            → {p-10 : x010 == x110} → {p1-0 : x100 == x110}
+            → {left : Square p0-0 p-00 p-10 p1-0}
+            → {p0-1 : x001 == x011} → {p-01 : x001 == x101}
+            → {p-11 : x011 == x111} → {p1-1 : x101 == x111}
+            → {right : Square p0-1 p-01 p-11 p1-1}
+            → {p00- : x000 == x001} → {p01- : x010 == x011}
+            → {p10- : x100 == x101} → {p11- : x110 == x111}
+            → {back : Square p0-0 p00- p01- p0-1}
+            → {top : Square p-00 p00- p10- p-01}
+            → {bottom : Square p-10 p01- p11- p-11}
+            → {front : Square p1-0 p10- p11- p1-1}
+            → Cube left right back top bottom front
+            → Cube (ap-square f left) (ap-square f right)
+                    (ap-square f back) (ap-square f top)
+                    (ap-square f bottom) (ap-square f front)
+  ap-cube = {!!}
+
+
+module _ {ℓ} {X : Type ℓ} where
+
+  cube-symmetry-left-to-top : {x000 x010 x100 x110 x001 x011 x101 x111 : X}
+            → {p0-0 : x000 == x010} → {p-00 : x000 == x100}
+            → {p-10 : x010 == x110} → {p1-0 : x100 == x110}
+            → {left : Square p0-0 p-00 p-10 p1-0}
+            → {p0-1 : x001 == x011} → {p-01 : x001 == x101}
+            → {p-11 : x011 == x111} → {p1-1 : x101 == x111}
+            → {right : Square p0-1 p-01 p-11 p1-1}
+            → {p00- : x000 == x001} → {p01- : x010 == x011}
+            → {p10- : x100 == x101} → {p11- : x110 == x111}
+            → {back : Square p0-0 p00- p01- p0-1}
+            → {top : Square p-00 p00- p10- p-01}
+            → {bottom : Square p-10 p01- p11- p-11}
+            → {front : Square p1-0 p10- p11- p1-1}
+            → Cube left right back top bottom front
+            → Cube (square-symmetry back) (square-symmetry front)
+                    (square-symmetry top) left
+                    right (square-symmetry bottom)
+  cube-symmetry-left-to-top = {!!}
+
+
+module _ {ℓ} {X : Type ℓ} where
+
+  fill-cube-left : {x000 x010 x100 x110 x001 x011 x101 x111 : X}
+                   → {p0-0 : x000 == x010} → {p-00 : x000 == x100}
+                   → {p-10 : x010 == x110} → {p1-0 : x100 == x110}
+                   → {p0-1 : x001 == x011} → {p-01 : x001 == x101}
+                   → {p-11 : x011 == x111} → {p1-1 : x101 == x111}
+                   → (right : Square p0-1 p-01 p-11 p1-1)
+                   → {p00- : x000 == x001} → {p01- : x010 == x011}
+                   → {p10- : x100 == x101} → {p11- : x110 == x111}
+                   → (back : Square p0-0 p00- p01- p0-1)
+                   → (top : Square p-00 p00- p10- p-01)
+                   → (bottom : Square p-10 p01- p11- p-11)
+                   → (front : Square p1-0 p10- p11- p1-1)
+                   → Σ (Square p0-0 p-00 p-10 p1-0)
+                        (λ left → Cube left right back top bottom front)
+  fill-cube-left = {!!}
+
+
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
+
+  in-SquareOver= : (f g : X → Y)
+                   → {x00 x01 x10 x11 : X}
+                   → {l : x00 == x01} → {t : x00 == x10}
+                   → {b : x01 == x11} → {r : x10 == x11}
+                   → (s : Square l t b r)
+                   → {ux00 : f x00 == g x00} → {ux01 : f x01 == g x01}
+                   → {ux10 : f x10 == g x10} → {ux11 : f x11 == g x11}
+                   → (ul : PathOver (paths f g) l ux00 ux01)
+                   → (ut : PathOver (paths f g) t ux00 ux10)
+                   → (ub : PathOver (paths f g) b ux01 ux11)
+                   → (ur : PathOver (paths f g) r ux10 ux11)
+                   → Cube (out-PathOver= ul) (out-PathOver= ur)
+                           (out-PathOver= ut) (ap-square f s)
+                           (ap-square g s) (out-PathOver= ub)
+                   → SquareOver (paths f g) s ul ut ub ur
+  in-SquareOver= = {!!}
+
+
+module ThreeByThree where
+
+  module Pushout {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {Y : Type ℓ₂} {Z : Type ℓ₃} where
+
+    private
+      data #Pushout (f : X → Y) (g : X → Z) : Type (ℓ₁ ⊔ ℓ₂ ⊔ ℓ₃) where
+        #inl : Y → #Pushout f g
+        #inr : Z → #Pushout f g
+
+    Pushout : (f : X → Y) → (g : X → Z) → Type (ℓ₁ ⊔ ℓ₂ ⊔ ℓ₃)
+    Pushout = #Pushout
+
+    inl : {f : X → Y} → {g : X → Z} → Y → Pushout f g
+    inl = #inl
+
+    inr : {f : X → Y} → {g : X → Z} → Z → Pushout f g
+    inr = #inr
+
+    postulate
+      push : {f : X → Y} → {g : X → Z}
+             → (x : X) → inl {f} {g} (f x) == inr (g x)
+
+    recPushout : {ℓ₄ : Level} → {f : X → Y} → {g : X → Z}
+                 → {C : Type ℓ₄} → (cl : Y → C) → (cr : Z → C)
+                 → ((x : X) → cl (f x) == cr (g x))
+                 → Pushout f g → C
+    recPushout cl cr φ (#inl y) = cl y
+    recPushout cl cr φ (#inr z) = cr z
+
+    postulate
+      recPushoutβ : {ℓ₄ : Level} → {f : X → Y} → {g : X → Z}
+                    → {C : Type ℓ₄} → (cl : Y → C) → (cr : Z → C)
+                    → (φ : (x : X) → cl (f x) == cr (g x))
+                    → (x : X) → ap (recPushout cl cr φ) (push x) == φ x
+
+    indPushout : {ℓ₄ : Level} → {f : X → Y} → {g : X → Z}
+                 → {P : Pushout f g → Type ℓ₄}
+                 → (cl : (y : Y) → P (inl y)) → (cr : (z : Z) → P (inr z))
+                 → ((x : X) → tpt P (push x) (cl (f x)) == cr (g x))
+                 → (w : Pushout f g) → P w
+    indPushout cl cr φ (#inl y) = cl y
+    indPushout cl cr φ (#inr z) = cr z
+
+    postulate
+      indPushoutβ : {ℓ₄ : Level} → {f : X → Y} → {g : X → Z}
+                    → {P : Pushout f g → Type ℓ₄}
+                    → (cl : (y : Y) → P (inl y)) → (cr : (z : Z) → P (inr z))
+                    → (φ : (x : X) → tpt P (push x) (cl (f x)) == cr (g x))
+                    → (x : X) → apd P (indPushout cl cr φ) (push x) == φ x
+
+    indPushouto : {ℓ₄ : Level} → {f : X → Y} → {g : X → Z}
+                  → {P : Pushout f g → Type ℓ₄}
+                  → (cl : (y : Y) → P (inl y)) → (cr : (z : Z) → P (inr z))
+                  → ((x : X) → PathOver P (push x) (cl (f x)) (cr (g x)))
+                  → (w : Pushout f g) → P w
+    indPushouto cl cr φ (#inl y) = cl y
+    indPushouto cl cr φ (#inr z) = cr z
+
+    postulate
+      indPushoutoβ : {ℓ₄ : Level} → {f : X → Y} → {g : X → Z}
+                     → {P : Pushout f g → Type ℓ₄}
+                     → (cl : (y : Y) → P (inl y)) → (cr : (z : Z) → P (inr z))
+                     → (φ : (x : X) → PathOver P (push x) (cl (f x)) (cr (g x)))
+                     → (x : X) → apdo (indPushouto cl cr φ) (push x) == φ x
+  
+  module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄ ℓ₅ ℓ₆ ℓ₇ ℓ₈ ℓ₉}
+           {X00 : Type ℓ₁} {X20 : Type ℓ₂} {X40 : Type ℓ₃}
+           {X02 : Type ℓ₄} {X22 : Type ℓ₅} {X42 : Type ℓ₆}
+           {X04 : Type ℓ₇} {X24 : Type ℓ₈} {X44 : Type ℓ₉}
+           {f10 : X20 → X00} {f30 : X20 → X40}
+           {f12 : X22 → X02} {f32 : X22 → X42}
+           {f14 : X24 → X04} {f34 : X24 → X44}
+           {f01 : X02 → X00} {f03 : X02 → X04}
+           {f21 : X22 → X20} {f23 : X22 → X24}
+           {f41 : X42 → X40} {f43 : X42 → X44}
+           {s11 : (x : X22) → f01 (f12 x) == f10 (f21 x)}
+           {s13 : (x : X22) → f03 (f12 x) == f14 (f23 x)}
+           {s31 : (x : X22) → f41 (f32 x) == f30 (f21 x)}
+           {s33 : (x : X22) → f43 (f32 x) == f34 (f23 x)} where
+           
+
+         
