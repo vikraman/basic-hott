@@ -15,8 +15,12 @@ module _ {ℓ₁ : Level} where
   ∥_∥ : Type ℓ₁ → Type ℓ₁
   ∥_∥ = #∥_∥
 
+  {-# DISPLAY #∥_∥ = ∥_∥ #-}
+
   ∣_∣ : {X : Type ℓ₁} → X → ∥ X ∥
-  ∣_∣ = #∣_∣ 
+  ∣_∣ = #∣_∣
+
+  {-# DISPLAY #∣_∣ = ∣_∣ #-}
 
   postulate
     identify : {X : Type ℓ₁} → (x y : ∥ X ∥) → x == y
