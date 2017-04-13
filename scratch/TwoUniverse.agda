@@ -3,6 +3,7 @@ module TwoUniverse where
 
 open import UnivalentTypeTheory
 open import PropositionalTruncation
+open import OneTypes
 
 is-type : ∀ {ℓ} (T : Type ℓ) → _
 is-type T = λ X → ∥ X == T ∥
@@ -73,8 +74,10 @@ module ComputationalProperties where
   coe[𝟚] = tpt El[𝟚]
 
   `id-β : (x : El[𝟚] `𝟚) → coe[𝟚] `id x == x
-  `id-β 0₂ = {!!}
-  `id-β 1₂ = {!!}
+  `id-β x = ap (λ p → coe[𝟚] p x) dpair≡ ◾ refl _
+    where
+    dpair≡ : dpair= {P = is-type 𝟚} (refl 𝟚 , identify _ _) == refl _
+    dpair≡ = ap (λ p → dpair= (refl 𝟚 , p)) (prop-is-set identify _ _ _ (refl _)) ◾ refl _
 
   `not-β : (x : El[𝟚] `𝟚) → coe[𝟚] `not x == not x
   `not-β 0₂ = {!!}
