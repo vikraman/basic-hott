@@ -70,7 +70,7 @@ module _ {ℓ : Level} {X : Type ℓ} where
 module ComputationalProperties where
 
   coe[𝟚] : (p : `𝟚 == `𝟚) → El[𝟚] `𝟚 → El[𝟚] `𝟚
-  coe[𝟚] p = {!!}
+  coe[𝟚] = tpt El[𝟚]
 
   `id-β : (x : El[𝟚] `𝟚) → coe[𝟚] `id x == x
   `id-β 0₂ = {!!}
