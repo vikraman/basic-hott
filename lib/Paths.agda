@@ -90,7 +90,7 @@ module _ {ℓ} {X : Type ℓ} where
   infixr 80 _[1,0,2]_
   _[1,0,2]_ : {x y z : X} → {r s : y == z}
               → (p : x == y) → r == s → p ◾ r == p ◾ s
-  (refl y) [1,0,2] β = ◾unitl _ ◾ β ◾ ! (◾unitl _)
+  (refl y) [1,0,2] γ = ◾unitl _ ◾ γ ◾ ! (◾unitl _)
 
   infixr 80 _[2,0,1]_
   _[2,0,1]_ : {x y z : X} → {p q : x == y}
