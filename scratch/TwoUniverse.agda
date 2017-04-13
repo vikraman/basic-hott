@@ -74,10 +74,9 @@ module ComputationalProperties where
   coe[𝟚] = tpt El[𝟚]
 
   `id-β : (x : El[𝟚] `𝟚) → coe[𝟚] `id x == x
-  `id-β x = ap (λ p → coe[𝟚] p x) dpair≡ ◾ refl _
-    where
-    dpair≡ : dpair= {P = is-type 𝟚} (refl 𝟚 , identify _ _) == refl _
-    dpair≡ = ap (λ p → dpair= (refl 𝟚 , p)) (prop-is-set identify _ _ _ (refl _)) ◾ refl _
+  `id-β x = ap (λ p → coe[𝟚] p x) dpair≡
+    where dpair≡ : dpair= (refl 𝟚 , identify _ _) == refl (𝟚 , ∣ (refl 𝟚) ∣)
+          dpair≡ = ap (λ p → dpair= (refl 𝟚 , p)) (prop-is-set identify _ _ _ _)
 
   `not-β : (x : El[𝟚] `𝟚) → coe[𝟚] `not x == not x
   `not-β 0₂ = {!!}
