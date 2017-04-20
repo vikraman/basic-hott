@@ -7,7 +7,7 @@ open import Paths
 
 data 𝟘 : Type₀ where
 
-module _ {ℓ : Level} where
+module _ {ℓ} where
 
   rec𝟘 : (X : Type ℓ) → 𝟘 → X
   rec𝟘 X ()
@@ -21,7 +21,7 @@ infix 100 ¬
 ¬ X = X → 𝟘
 
 
-module _ {ℓ : Level} {X : Type ℓ} where
+module _ {ℓ} {X : Type ℓ} where
 
   infixr 30 _≠_
   _≠_ : X → X → Type ℓ

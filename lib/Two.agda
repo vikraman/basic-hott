@@ -9,7 +9,7 @@ data 𝟚 : Type₀ where
   1₂ : 𝟚
 
 
-module _ {ℓ : Level} where
+module _ {ℓ} where
 
   rec𝟚 : (X : Type ℓ) → X → X → 𝟚 → X
   rec𝟚 X x y 0₂ = x

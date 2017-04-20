@@ -11,13 +11,13 @@ open import PathsInSigma
 open import OneTypes
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   is-contr-fn : (f : X → Y) → Type (ℓ₁ ⊔ ℓ₂)
   is-contr-fn f = (y : Y) → is-contr (fib f y)
 
 
-module HaeIsContrFn {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} {f : X → Y} where
+module HaeIsContrFn {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} {f : X → Y} where
 
   module HaeIsProp (e : is-hae f) (y : Y) (v w : fib f y) where
 
@@ -39,7 +39,7 @@ module HaeIsContrFn {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} 
     r = ! (η x) ◾ ap g q ◾ η x'
 
     ap-f-r : ap f r == ! (ap f (η x)) ◾ ap f (ap g q) ◾ ap f (η x')
-    ap-f-r = ap◾ _ _ _ ◾ (ap! _ _ [2,1,2] ap◾ _ _ _)
+    ap-f-r = ap◾ _ _ _ ◾ (ap! _ _ [2,0,2] ap◾ _ _ _)
 
     sq₁ : ε (f x) ◾ ap id q == ap (f ∘ g) q ◾ ε (f x') 
     sq₁ = nat ε q
@@ -52,7 +52,7 @@ module HaeIsContrFn {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} 
 
     ur : tpt (paths-r f y) r p == p'
     ur = tpt-paths-r f r p
-         ◾ ! (! (!! _) ◾ l₁=r◾!l₂ (! (mirror ur' ◾ !◾ _ _)) ◾ _ [1,1,2] !! _)
+         ◾ ! (! (!! _) ◾ l₁=r◾!l₂ (! (mirror ur' ◾ !◾ _ _)) ◾ _ [1,0,2] !! _)
 
     hae-is-prop : v == w
     hae-is-prop = dpair= (r , ur)

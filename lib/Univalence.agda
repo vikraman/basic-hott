@@ -8,7 +8,7 @@ postulate
   univalence : {ℓ : Level} → (X Y : Type ℓ) → is-equiv (path-to-eqv {ℓ} {X} {Y})
 
 
-module _ {ℓ : Level} {X Y : Type ℓ} where
+module _ {ℓ} {X Y : Type ℓ} where
 
   ua : X ≃ Y → X == Y
   ua = p₁ (univalence X Y)
@@ -31,7 +31,7 @@ ua-ide X = ua-η (refl X)
 
 
 
-module _ {ℓ ℓ' : Level} where  
+module _ {ℓ ℓ'} where  
   
   ind≃ : (P : {X Y : Type ℓ} → X ≃ Y → Type ℓ')
          → (r : (X : Type ℓ) → P (ide X))
@@ -64,7 +64,7 @@ module _ {ℓ ℓ' : Level} where
           f (refl X) = r
 
 
-module _ {ℓ : Level} {X Y : Type ℓ} where
+module _ {ℓ} {X Y : Type ℓ} where
 
   ua-η-! : {X Y : Type ℓ} → (p : X == Y) → ua (!e (path-to-eqv p)) == ! p
   ua-η-! (refl X) = ua-ide X
@@ -73,7 +73,7 @@ module _ {ℓ : Level} {X Y : Type ℓ} where
   ua-!e e =  ap (ua ∘ !e) (! (ua-β _)) ◾ ua-η-! _
 
 
-module _ {ℓ : Level} where
+module _ {ℓ} where
 
   ua-η-◾ : {X Y Z : Type ℓ} → (p : X == Y) → (q : Y == Z) → ua (path-to-eqv q ● path-to-eqv p) == p ◾ q
   ua-η-◾ p q = ap ua (! (path-to-eqv-◾ _ _)) ◾ ua-η _

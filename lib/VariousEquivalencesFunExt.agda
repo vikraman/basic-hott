@@ -5,7 +5,7 @@ open import IntensionalTypeTheory
 open import FunctionExtensionality
 
 
-module PiPreservesFiberwiseEquiv {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
+module PiPreservesFiberwiseEquiv {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
   ap-funext : {P Q : X → Type ℓ₂} → (F : (x : X) → P x → Q x)
               → {f g : (x : X) → P x} → (φ : f ∼ g)

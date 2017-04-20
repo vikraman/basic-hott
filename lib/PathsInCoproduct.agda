@@ -12,7 +12,7 @@ open import Zero
 open import One
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} {x₀ : X} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} {x₀ : X} where
 
   i₁=code : X + Y → Type ℓ₁
   i₁=code (i₁ x) = x₀ == x
@@ -42,7 +42,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} {x₀ : X} 
   paths-in-+₁ u = i₁=-e {u} , i₁= {u} , i₁=-η {u} , i₁=-β {u} , i₁=-τ {u}
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} {y₀ : Y} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} {y₀ : Y} where
 
   i₂=code : X + Y → Type ℓ₂
   i₂=code (i₁ x) = 𝟘'

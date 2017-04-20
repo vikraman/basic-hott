@@ -15,7 +15,7 @@ open import PathsInSigma
 open import PathsInCoproduct
 
 
-module _ {ℓ : Level} where
+module _ {ℓ} where
 
   is-contr : Type ℓ → Type ℓ
   is-contr X = Σ X (λ x → (y : X) → (x == y))
@@ -30,7 +30,7 @@ module _ {ℓ : Level} where
   is-1type X = (x y : X) → (p q : x == y) → (α β : p == q) → α == β
 
 
-module _ {ℓ : Level} {X : Type ℓ} where
+module _ {ℓ} {X : Type ℓ} where
 
   contr-is-prop : is-contr X → is-prop X
   contr-is-prop (x₀ , φ) x y = ! (φ x) ◾ φ y
@@ -83,7 +83,7 @@ module _ where
 𝟙-is-contr = 0₁ , 𝟙-has-one-elem _
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   logical-eqv : is-prop X → is-prop Y → (X → Y) → (Y → X) → X ≃ Y
   logical-eqv φ ψ f g = f , g , h , k , adj
@@ -92,7 +92,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
           adj = λ x → prop-is-set ψ _ _ _ _
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
   ×-prsrv-contr : {Y : Type ℓ₂} → is-contr X → is-contr Y → is-contr (X × Y)
   ×-prsrv-contr (x , f) (y , g) = (x , y) , (λ w → pair= (f (p₁ w) , g (p₂ w)))

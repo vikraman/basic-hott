@@ -5,7 +5,7 @@ open import Type
 open import Functions
 
 
-module _ {ℓ₁ ℓ₂ : Level} where
+module _ {ℓ₁ ℓ₂} where
 
   infixr 60 _,_
   record Σ (X : Type ℓ₁) (P : X → Type ℓ₂) : Type (ℓ₁ ⊔ ℓ₂) where
@@ -20,7 +20,7 @@ module _ {ℓ₁ ℓ₂ : Level} where
   X × Y = Σ X (λ x → Y)
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {P : X → Type ℓ₂} where
 
   indΣ : (Q : Σ X P → Type ℓ₃) → ((x : X) → (ux : P x) → Q (x , ux))
          → (w : Σ X P) → Q w
@@ -31,7 +31,7 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂
   Σ-unv-prp (f , g) y = f y , g y
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂}
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {P : X → Type ℓ₂}
          {Q : (x : X) → P x → Type ℓ₃} where
 
   Σ-unv-prp' : Σ ((x : X) → P x) (λ f → (x : X) → Q x (f x))
@@ -39,7 +39,7 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂
   Σ-unv-prp' (f , g) x = f x , g x
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   ind× : (Q : X × Y → Type ℓ₃)
          → ((x : X) → (y : Y) → Q (x , y)) → (w : X × Y) → Q w
@@ -49,7 +49,7 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} wher
   ×-unv-prp (f , g) z = f z , g z
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level} where
+module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄} where
 
   dpair→ : {X : Type ℓ₁} → {P : X → Type ℓ₂} → {X' : Type ℓ₃} → {P' : X' → Type ℓ₄}
             → Σ (X → X') (λ f → ((x : X) → P x → P' ∘ f $ x))
@@ -61,7 +61,7 @@ module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level} where
   pair→ (f , f') (x , x') = f x , f' x'
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} {Y : Type ℓ₃} where
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {P : X → Type ℓ₂} {Y : Type ℓ₃} where
 
   curry : (Σ X P → Y) → ((x : X) → (ux : P x) → Y)
   curry f x ux = f (x , ux)

@@ -4,7 +4,7 @@ module Functions where
 open import Type
 
 
-module _ {ℓ₁ ℓ₂ : Level} where
+module _ {ℓ₁ ℓ₂} where
 
   Π : (X : Type ℓ₁) → (P : X → Type ℓ₂) → Type (ℓ₁ ⊔ ℓ₂)
   Π X P = (x : X) → P x

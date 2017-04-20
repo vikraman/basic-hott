@@ -9,7 +9,7 @@ open import Homotopies
 open import Equivalences
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   -- introduction for paths of pairs
   pair= : {x x' : X} → {y y' : Y} → (x == x') × (y == y') → (x , y) == (x' , y')
@@ -25,7 +25,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
   pair=-e : {x x' : X} → {y y' : Y} → (x , y) == (x' , y') → (x == x') × (y == y')
   pair=-e = ×-unv-prp (pair=-e₁ , pair=-e₂)
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   -- computation for paths of pairs
   pair=-β₁ : {x x' : X} → {y y' : Y}
@@ -46,7 +46,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
   pair=-η (refl (x , y)) = refl (refl (x , y))
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level}
+module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄}
          {X : Type ℓ₁} {Y : Type ℓ₂} {X' : Type ℓ₃} {Y' : Type ℓ₄} where
 
   pair=ap : (f : X → Y) → (f' : X' → Y')
@@ -55,14 +55,14 @@ module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level}
   pair=ap f f' (refl x) (refl x') = refl (refl (f x , f' x'))
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
   dpaths : (P : X → Type ℓ₂)
            → {x y : X} → (ux : P x) → (uy : P y) → Type (ℓ₁ ⊔ ℓ₂)
   dpaths P {x} {y} ux uy = Σ (x == y) (λ p → tpt P p ux == uy)
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {P : X → Type ℓ₂} where
 
   -- introduction for paths of dependent pairs
   dpair= : {x y : X} → {ux : P x} → {uy : P y}
@@ -81,7 +81,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
              → (p : (x , ux) == (y , uy)) → dpaths P ux uy
   dpair=-e = Σ-unv-prp (dpair=-e₁ , dpair=-e₂)
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {P : X → Type ℓ₂} where
 
   -- computation for paths of dependent pairs
   dpair=-β₁ : {x y : X} → {ux : P x} → {uy : P y}
@@ -102,7 +102,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
   dpair=-η (refl (x , ux)) = refl (refl (x , ux))
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
   paths-in-Σ : (P : X → Type ℓ₂) →
                {x x' : X} → (y : P x) → (y' : P x')
@@ -113,7 +113,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
           τ (refl (x , ux)) = refl (refl (refl x , refl ux))
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} {Q : X → Type ℓ₃} where
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {P : X → Type ℓ₂} {Q : X → Type ℓ₃} where
 
   ap-dpair' : (f : ((x : X) → P x → Q x)) → {x y : X} → (p : x == y)
               → {ux : P x} → {uy : P y} → (up : tpt P p ux == uy)

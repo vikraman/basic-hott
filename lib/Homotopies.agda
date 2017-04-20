@@ -7,7 +7,7 @@ open import DependentSum
 open import Paths
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {P : X → Type ℓ₂} where
 
   infixr 30 _∼_
   _∼_ : ((x : X) → P x) → ((x : X) → P x) → Type (ℓ₁ ⊔ ℓ₂)
@@ -24,14 +24,14 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
   _◽_ σ τ x = σ x ◾ τ x 
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   nat : {f g : X → Y} → (φ : f ∼ g)
         → {x y : X} → (p : x == y) → φ x ◾ ap g p == ap f p ◾ φ y
   nat φ (refl x) = ◾unitr (φ x) ◾ ! (◾unitl (φ x))
 
 
-module _ {ℓ : Level} {X : Type ℓ} where
+module _ {ℓ} {X : Type ℓ} where
 
   nat-id : {f : X → X} → (φ : f ∼ id)
            → {x y : X} → (p : x == y) → φ x ◾ p == ap f p ◾ φ y
@@ -44,7 +44,7 @@ module _ {ℓ : Level} {X : Type ℓ} where
     ◾ ◾unitr _
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {P : X → Type ℓ₂} where
 
   happly : {f g : (x : X) → P x} → f == g → f ∼ g
   happly (refl f) = idh f

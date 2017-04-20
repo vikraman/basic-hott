@@ -19,13 +19,13 @@ open import OneTypes
 open import nTypes
 
 
-module _ {ℓ : Level} {X : Type ℓ} where
+module _ {ℓ} {X : Type ℓ} where
 
   !-is-equiv : {x y : X} → is-equiv (! {x = x} {y})
   !-is-equiv = ! , !! , !! , !!!
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {P : X → Type ℓ₂} where
 
   tpt!-is-equiv : {x y : X} → (p : x == y)
                   → (ux : P x) → (uy : P y) → is-equiv (tpt! p ux uy)
@@ -36,7 +36,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂} where
   !-anticomm-tpt p ux uy = (tpt! p ux uy) , (tpt!-is-equiv p ux uy)
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} {Z : Type ℓ₃} where
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {Y : Type ℓ₂} {Z : Type ℓ₃} where
 
   ×-unv-prp-is-equiv : is-equiv (×-unv-prp {X = X} {Y} {Z})
   ×-unv-prp-is-equiv = (λ t → p₁ ∘ t , p₂ ∘ t) , refl , refl ,
@@ -47,7 +47,7 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} {Z :
   →-comm-× = !e (×-unv-prp {X = X} {Y} {Z} , ×-unv-prp-is-equiv)
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₃} {Z : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {P : X → Type ℓ₃} {Z : Type ℓ₂} where
 
   Σ-unv-prp-is-equiv : is-equiv (Σ-unv-prp {X = X} {P} {Z})
   Σ-unv-prp-is-equiv = (λ t → p₁ ∘ t , p₂ ∘ t) , refl , refl ,
@@ -58,7 +58,7 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₃
   →-comm-Σ = !e (Σ-unv-prp {X = X} {P} {Z} , Σ-unv-prp-is-equiv)
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂}
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {P : X → Type ℓ₂}
          {Q : (x : X) → P x → Type ℓ₃} where
 
   Σ-unv-prp'-is-equiv : is-equiv (Σ-unv-prp' {X = X} {P} {Q})
@@ -71,7 +71,7 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂
   →-comm-Σ' = !e (Σ-unv-prp' {X = X} {P} {Q} , Σ-unv-prp'-is-equiv)
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂}
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} {P : X → Type ℓ₂}
          {Q : (x : X) → P x → Type ℓ₃} where
 
   Σ-assoc : Σ X (λ x → Σ (P x) (Q x)) ≃ Σ (Σ X P) (λ w → Q (p₁ w) (p₂ w))
@@ -82,7 +82,7 @@ module _ {ℓ₁ ℓ₂ ℓ₃ : Level} {X : Type ℓ₁} {P : X → Type ℓ₂
           g ((x , y) , z) = x , y , z
 
 
-module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level} {X : Type ℓ₁}
+module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄} {X : Type ℓ₁}
          {P : X → Type ℓ₂} {Q : (x : X) → P x → Type ℓ₃}
          {R : (x : X) → (y : P x) → (z : Q x y) → Type ℓ₄} where
 
@@ -99,7 +99,7 @@ module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level} {X : Type ℓ₁}
 
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
   Σ-fib-eqv : {P Q : X → Type ℓ₂} → ((x : X) → P x ≃ Q x) → Σ X P ≃ Σ X Q
   Σ-fib-eqv h = f , g , η , ε , τ
@@ -154,7 +154,7 @@ not-eqv : 𝟚 ≃ 𝟚
 not-eqv = (not , not-is-equiv)
 
 
-module _ {ℓ : Level} {X : Type ℓ} where
+module _ {ℓ} {X : Type ℓ} where
 
   inhab-prop≃𝟙 : (x : X) → is-prop X → X ≃ 𝟙
   inhab-prop≃𝟙 x φ = f , g , η , ε , τ
@@ -165,7 +165,7 @@ module _ {ℓ : Level} {X : Type ℓ} where
           τ = λ z → contr-is-set 𝟙-is-contr _ _ _ _
 
 
-module _ {ℓ : Level} {X Y : Type ℓ} where
+module _ {ℓ} {X Y : Type ℓ} where
 
   coprod≃Σ𝟚 : X + Y ≃ Σ 𝟚 (rec𝟚 (Type ℓ) X Y)
   coprod≃Σ𝟚 = f , g , η , ε , τ

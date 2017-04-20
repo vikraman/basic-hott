@@ -7,7 +7,7 @@ open import OneTypesFunExt
 open import VariousEquivalencesFunExt
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} (f : X → Y) where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} (f : X → Y) where
 
   post∘-prsrv-qinv : is-qinv f → is-qinv {X = (Y → X)} (λ g → g ∘ f)
   post∘-prsrv-qinv (g , η , ε) = (λ h → h ∘ g) ,
@@ -20,7 +20,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} (f : X → 
                                 (λ h → funext (ε ∘ h))
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   rinv : (X → Y) → Type (ℓ₁ ⊔ ℓ₂)
   rinv = is-retraction
@@ -39,7 +39,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
                          ∘ qinv-rinv'-is-contr f
 
 
-module ContrFnIsHae {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module ContrFnIsHae {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   rcoh : (f : X → Y) → rinv f → Type (ℓ₁ ⊔ ℓ₂)
   rcoh f (g , ε) = Σ (g ∘ f ∼ id) (λ η → ap f ∘ η ∼ ε ∘ f)
@@ -93,7 +93,7 @@ module ContrFnIsHae {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} 
 open ContrFnIsHae public using (rcoh ; hae-rcoh-is-contr ; contr-is-hae)
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   -- Could also be proved with associative and commutative laws
   Σ-rinv-rcoh≃is-hae : (f : X → Y) → Σ (rinv f) (rcoh f) ≃ is-hae f
@@ -104,7 +104,7 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
           g' (g , η , ε , τ) = (g , ε) , (η , τ)
 
 
-module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} {Y : Type ℓ₂} where
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   is-hae-is-contr : {f : X → Y} → is-hae f → is-contr (is-hae f)
   is-hae-is-contr {f} e = retract-prsrv-contr (equiv-is-retract (Σ-rinv-rcoh≃is-hae f)) φ
