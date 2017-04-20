@@ -58,13 +58,13 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {P : X → Type ℓ₂} where
 `ρ = dpair=◾ (ua not-eqv) (identify _ _) (ua not-eqv) (identify _ _)
      ◾ ap dpair= (dpair= (notp◾notp=refl , prop-is-set identify _ _ _ _))
 
-module _ {ℓ : Level} {X : Type ℓ} where
+module _ {ℓ} {X : Type ℓ} where
 
   -- General lemma about identity under truncation (migrate up)
-  lem1 : (P : (x : X) → Type ℓ) → ((x : X) → is-prop (P x))
+  ∥dpair=∥ : (P : (x : X) → Type ℓ) → ((x : X) → is-prop (P x))
          → {x x' : X} → (y : P x) → (y' : P x')
          → ∥ x == x' ∥ → ∥ (x , y) == (x' , y') ∥
-  lem1 P φ {x} {x'} y y' = indTrunc _ f (λ p → identify)
+  ∥dpair=∥ P φ {x} {x'} y y' = indTrunc _ f (λ p → identify)
     where f : x == x' → ∥ (x , y) == (x' , y') ∥
           f p = ∣ dpair= (p , φ x' (tpt P p y) y') ∣
 
@@ -86,17 +86,49 @@ module ZeroDimensionalTerms where
 
   -- TODO: generalize to any singleton subuniverse (trivial)
   sing-path-conn : (x : U[𝟚]) → ∥ x == `𝟚 ∥
-  sing-path-conn (X , p) = lem1 is-𝟚 (λ p → identify) p ∣ refl 𝟚 ∣ p
+  sing-path-conn (X , p) = ∥dpair=∥ is-𝟚 (λ p → identify) p ∣ refl 𝟚 ∣ p
+
+module EquivBool where
+
+  data Singleton {a} {A : Set a} (x : A) : Set a where
+    _with=_ : (y : A) → x == y → Singleton x
+
+  inspect : ∀ {a} {A : Set a} (x : A) → Singleton x
+  inspect x = x with= (refl x)
+
+  φ-𝟘 : (f : 𝟚 → 𝟚) → (e : is-equiv f)
+        → Σ 𝟚 (λ b → (f 0₂ == b) × (f 1₂ == b)) → 𝟘
+  φ-𝟘 f (g , η , ε , τ) (b , (p , q)) = 0₂≠1₂ (! (η 0₂) ◾ ap g (p ◾ ! q) ◾ η 1₂)
+  
+  φ : (f : 𝟚 → 𝟚) → (e : is-equiv f) → (f == id) + (f == not)
+  φ f e with inspect (f 0₂) | inspect (f 1₂)
+  φ f e        | 0₂ with= p | 0₂ with= q = rec𝟘 _ (φ-𝟘 f e (0₂ , (p , q)))
+  φ f e        | 0₂ with= p | 1₂ with= q = i₁ (funext (ind𝟚 _ p q)) 
+  φ f e        | 1₂ with= p | 0₂ with= q = i₂ (funext (ind𝟚 _ p q))
+  φ f e        | 1₂ with= p | 1₂ with= q = rec𝟘 _ (φ-𝟘 f e (1₂ , (p , q)))
+
+  ψ : {f : 𝟚 → 𝟚} → {e : is-equiv f}
+      → (f == id) + (f == not) → ((f , e) == ide 𝟚) + ((f , e) == not-eqv)
+  ψ (i₁ p) = i₁ (eqv= p)
+  ψ (i₂ p) = i₂ (eqv= p)
+
+  all-eqvs : (e : 𝟚 ≃ 𝟚) → (e == ide 𝟚) + (e == not-eqv)
+  all-eqvs (f , e') = ψ (φ f e')
+
+
+-- The claims below follow from all-eqvs (1-dim) and Aut𝟚-is-set
+-- (2-dim) and general stuff like ∥dpair=∥ and ΩBAut≃Aut from
+-- UniFibExamples
 
 module OneDimensionalTerms where
 
-  all-1-paths : (p : `𝟚 == `𝟚) → ∥ (p == `id) + (p == `not) ∥
+  all-1-paths : (p : `𝟚 == `𝟚) → (p == `id) + (p == `not)
   all-1-paths p = {!!}
 
 module TwoDimensionalTerms where
 
-  all-2-paths-id : (u : `id == `id) → ∥ u == refl `id ∥
+  all-2-paths-id : (u : `id == `id) → u == refl `id
   all-2-paths-id = {!!}
 
-  all-2-paths-not : (u : `not == `not) → ∥ u == refl `not ∥
+  all-2-paths-not : (u : `not == `not) → u == refl `not
   all-2-paths-not = {!!}

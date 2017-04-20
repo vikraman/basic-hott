@@ -9,10 +9,12 @@ open import Coproduct
 open import Paths
 open import Homotopies
 open import Equivalences
+open import Zero
 open import One
 open import Two
 open import PathsInSigma
 open import PathsInOne
+open import PathsInCoproduct
 open import OneTypes
 open import nTypes
 
@@ -116,25 +118,28 @@ module _ {ℓ₁ ℓ₂ : Level} {X : Type ℓ₁} where
           τ (x , ux) = ap-dpair' f' (refl x) (η' x ux)
                        ◾ ap dpair= (dpair= (refl (refl x) , ◾unitl _ ◾ τ' x ux))
 
+module _ where
 
-𝟙+𝟙≃𝟚 : 𝟙 + 𝟙 ≃ 𝟚
-𝟙+𝟙≃𝟚 = f , g , η , ε , τ
-  where f : 𝟙 + 𝟙 → 𝟚
-        f (i₁ x) = 0₂
-        f (i₂ y) = 1₂
-        g : 𝟚 → 𝟙 + 𝟙
-        g 0₂ = i₁ 0₁
-        g 1₂ = i₂ 0₁
-        η : g ∘ f ∼ id
-        η (i₁ 0₁) = refl (i₁ 0₁)
-        η (i₂ 0₁) = refl (i₂ 0₁)
-        ε : f ∘ g ∼ id
-        ε 0₂ = refl 0₂
-        ε 1₂ = refl 1₂
-        τ : ap f ∘ η ∼ ε ∘ f
-        τ (i₁ 0₁) = refl (refl 0₂)
-        τ (i₂ 0₁) = refl (refl 1₂)
+  𝟙+𝟙≃𝟚 : 𝟙 + 𝟙 ≃ 𝟚
+  𝟙+𝟙≃𝟚 = f , g , η , ε , τ
+    where f : 𝟙 + 𝟙 → 𝟚
+          f (i₁ x) = 0₂
+          f (i₂ y) = 1₂
+          g : 𝟚 → 𝟙 + 𝟙
+          g 0₂ = i₁ 0₁
+          g 1₂ = i₂ 0₁
+          η : g ∘ f ∼ id
+          η (i₁ 0₁) = refl (i₁ 0₁)
+          η (i₂ 0₁) = refl (i₂ 0₁)
+          ε : f ∘ g ∼ id
+          ε 0₂ = refl 0₂
+          ε 1₂ = refl 1₂
+          τ : ap f ∘ η ∼ ε ∘ f
+          τ (i₁ 0₁) = refl (refl 0₂)
+          τ (i₂ 0₁) = refl (refl 1₂)
 
+  0₂≠1₂ : 0₂ ≠ 1₂
+  0₂≠1₂ p = ¬𝟘' (i₁=-e (ap (p₁ (p₂ 𝟙+𝟙≃𝟚)) p))
 
 not-is-equiv : is-equiv not
 not-is-equiv = not , η , η , τ

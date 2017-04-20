@@ -43,18 +43,25 @@ module _ {ℓ ℓ' : Level} where
           f : {X Y : Type ℓ} → (p : X == Y) → P (path-to-eqv p)
           f (refl X) = r X
 
-  -- ind≃r : {Y : Type ℓ}
-  --         → (P : {X : Type ℓ} → X ≃ Y → Type ℓ')
-  --         → (r : P (ide Y))
-  --         → {X : Type ℓ} → (e : X ≃ Y) → P e
-  -- ind≃r = {!!}
+  ind≃r : {Y : Type ℓ}
+          → (P : {X : Type ℓ} → X ≃ Y → Type ℓ')
+          → (r : P (ide Y))
+          → {X : Type ℓ} → (e : X ≃ Y) → P e
+  ind≃r {Y} P r e = φ e (f (ua e))
+    where φ : {X : Type ℓ} → (e : X ≃ Y) → P (path-to-eqv (ua e)) → P e
+          φ = coe ∘ ap P ∘ ua-β          
+          f : {X : Type ℓ} → (p : X == Y) → P (path-to-eqv p)
+          f (refl X) = r
 
-  -- ind≃l : {X : Type ℓ}
-  --         → (P : {Y : Type ℓ} → X ≃ Y → Type ℓ')
-  --         → (r : P (ide X))
-  --         → {Y : Type ℓ} → (e : X ≃ Y) → P e
-  -- ind≃l = {!!}
-
+  ind≃l : {X : Type ℓ}
+          → (P : {Y : Type ℓ} → X ≃ Y → Type ℓ')
+          → (r : P (ide X))
+          → {Y : Type ℓ} → (e : X ≃ Y) → P e
+  ind≃l {X} P r e = φ e (f (ua e))
+    where φ : {Y : Type ℓ} → (e : X ≃ Y) → P (path-to-eqv (ua e)) → P e
+          φ = coe ∘ ap P ∘ ua-β          
+          f : {Y : Type ℓ} → (p : X == Y) → P (path-to-eqv p)
+          f (refl X) = r
 
 
 module _ {ℓ : Level} {X Y : Type ℓ} where
