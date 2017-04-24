@@ -16,8 +16,8 @@ module _ {ℓ} where
                           funext (λ y →
                           prop-is-set φ _ _ _ _))
 
-  is-prop-is-set : (X : Type ℓ) → is-prop (is-set X)
-  is-prop-is-set X φ ψ = funext (λ x →
+  is-set-is-prop : (X : Type ℓ) → is-prop (is-set X)
+  is-set-is-prop X φ ψ = funext (λ x →
                          funext (λ y →
                          funext (λ p →
                          funext (λ q →

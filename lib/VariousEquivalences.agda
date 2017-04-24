@@ -99,9 +99,10 @@ module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄} {X : Type ℓ₁}
 
 
 
-module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} where
 
-  Σ-fib-eqv : {P Q : X → Type ℓ₂} → ((x : X) → P x ≃ Q x) → Σ X P ≃ Σ X Q
+  Σ-fib-eqv : {P : X → Type ℓ₂} → {Q : X → Type ℓ₃}
+              → ((x : X) → P x ≃ Q x) → Σ X P ≃ Σ X Q
   Σ-fib-eqv h = f , g , η , ε , τ
     where f' = λ x → p₁ (h x)
           g' = λ x → p₁ (p₂ (h x))
