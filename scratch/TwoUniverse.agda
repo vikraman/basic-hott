@@ -151,6 +151,20 @@ module OneDimensionalTerms where
           φ {l} (i₂ α) = i₂ (ap-dpair=-e-out (α ◾ ! (dpair=-β₁ _))
                                              (prop-is-set identify _ _ _ _))
 
+  open ComputationalProperties
+
+  !not=not : ! `not == `not
+  !not=not with all-1-paths (! `not)
+  !not=not | i₁ !not=id  =
+    rec𝟘 _ (0!=1 (! (`id-β 0₂) ◾ ap (λ p → coe[𝟚] p 0₂) id=not ◾ `not-β 0₂))
+    where
+    0!=1 : ¬ (0₂ == 1₂)
+    0!=1 ()
+
+    id=not : `id == `not
+    id=not = ! (◾invl `not) ◾ ap (λ x → x ◾ `not) !not=id ◾ ◾unitl `not
+  !not=not | i₂ !not=not = !not=not
+
 module TwoDimensionalTerms where
 
   𝟚-is-set : is-set 𝟚
@@ -166,7 +180,6 @@ module TwoDimensionalTerms where
 
   all-2-paths-not : (u : `not == `not) → u == refl `not
   all-2-paths-not u = U[𝟚]-is-1type _ _ _ _ u (refl `not)
-
 
 module ModelsOfP where
 
