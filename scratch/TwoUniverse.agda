@@ -72,8 +72,8 @@ El[𝟚] X = 𝟚
 `𝟚 : U[𝟚]
 `𝟚 = (𝟚 , ∣ refl 𝟚 ∣)
 
-`id : `𝟚 == `𝟚
-`id = dpair= (refl 𝟚 , identify _ _)
+`id : {A : U[𝟚]} → A == A
+`id {A} = refl A
 
 `not : `𝟚 == `𝟚
 `not = dpair= (ua not-eqv , identify _ _)
@@ -95,11 +95,11 @@ notp◾notp=refl = ! (ua-● not-eqv not-eqv)
 
 module ComputationalProperties where
 
-  coe[𝟚] : (p : `𝟚 == `𝟚) → El[𝟚] `𝟚 → El[𝟚] `𝟚
+  coe[𝟚] : ∀ {A : U[𝟚]} → (p : A == A) → El[𝟚] A → El[𝟚] A
   coe[𝟚] = tpt El[𝟚]
 
-  `id-β : (x : El[𝟚] `𝟚) → coe[𝟚] `id x == x
-  `id-β x = ap (λ p → coe[𝟚] p x) dpair≡
+  `id-β : (x : El[𝟚] `𝟚) → coe[𝟚] {`𝟚} `id x == x
+  `id-β x = ap (λ p → coe[𝟚] {`𝟚} p x) {!!} -- ap (λ p → coe[𝟚] p x) dpair≡
     where dpair≡ : dpair= (refl 𝟚 , identify _ _) == refl (𝟚 , ∣ (refl 𝟚) ∣)
           dpair≡ = ap (λ p → dpair= (refl 𝟚 , p)) (prop-is-set identify _ _ _ _)
 
@@ -161,6 +161,22 @@ module OneDimensionalTerms where
           φ {l} (i₂ α) = i₂ (ap-dpair=-e-out (α ◾ ! (dpair=-β₁ _))
                                              (prop-is-set identify _ _ _ _))
 
+  open ComputationalProperties
+
+  ¬id=not : ¬ (`id == `not)
+  ¬id=not id=not = rec𝟘 _ (0!=1 ((! (`id-β 0₂) ◾ ap (λ p → coe[𝟚] p 0₂) id=not ◾ `not-β 0₂)))
+    where
+    0!=1 : ¬ (0₂ == 1₂)
+    0!=1 ()
+
+  !not=not : ! `not == `not
+  !not=not with all-1-paths (! `not)
+  !not=not | i₁ !not=id = rec𝟘 _ (¬id=not id=not)
+    where
+    id=not : `id == `not
+    id=not = ! (◾invl `not) ◾ ap (λ x → x ◾ `not) !not=id ◾ ◾unitl `not
+  !not=not | i₂ !not=not = !not=not
+
 open OneDimensionalTerms public using (all-1-paths)
 
 module TwoDimensionalTerms where
@@ -173,7 +189,7 @@ module TwoDimensionalTerms where
   U[𝟚]-is-1type : is-1type U[𝟚]
   U[𝟚]-is-1type = Σ-Type-is-incr-lvl 𝟚-is-set
 
-  all-2-paths-id : (u : `id == `id) → u == refl `id
+  all-2-paths-id : (u : `id {`𝟚} == `id) → u == refl `id
   all-2-paths-id u = U[𝟚]-is-1type _ _ _ _ u (refl `id)
 
   all-2-paths-not : (u : `not == `not) → u == refl `not
