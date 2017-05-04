@@ -44,6 +44,14 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {P : X → Type ℓ₂} where
                                     ◾ ap dpair= (dpair= (α , β))
                                     ◾ dpair=-η q
 
+
+module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄} {X : Type ℓ₁} {Y : Type ℓ₂}
+         {X' : Type ℓ₃} {Y' : Type ℓ₄} where
+
+  +fn : (X → Y) → (X' → Y') → X + X' → Y + Y'
+  +fn f f' (i₁ x) = i₁ (f x)
+  +fn f f' (i₂ x') = i₂ (f' x')
+
 ----------------------------------------------------------------------
 
 
@@ -104,6 +112,8 @@ module ZeroDimensionalTerms where
   U[𝟚]-is-path-conn : is-path-conn U[𝟚]
   U[𝟚]-is-path-conn = Σ-Type-is-is-path-conn 𝟚
 
+open ZeroDimensionalTerms public
+
 module OneDimensionalTerms where
 
   module EquivBool where
@@ -117,11 +127,11 @@ module OneDimensionalTerms where
     φ-𝟘 : (f : 𝟚 → 𝟚) → (e : is-equiv f)
           → Σ 𝟚 (λ b → (f 0₂ == b) × (f 1₂ == b)) → 𝟘
     φ-𝟘 f (g , η , ε , τ) (b , (p , q)) = 0₂≠1₂ (! (η 0₂) ◾ ap g (p ◾ ! q) ◾ η 1₂)
-  
+
     φ : (f : 𝟚 → 𝟚) → (e : is-equiv f) → (f == id) + (f == not)
     φ f e with inspect (f 0₂) | inspect (f 1₂)
     φ f e        | 0₂ with= p | 0₂ with= q = rec𝟘 _ (φ-𝟘 f e (0₂ , (p , q)))
-    φ f e        | 0₂ with= p | 1₂ with= q = i₁ (funext (ind𝟚 _ p q)) 
+    φ f e        | 0₂ with= p | 1₂ with= q = i₁ (funext (ind𝟚 _ p q))
     φ f e        | 1₂ with= p | 0₂ with= q = i₂ (funext (ind𝟚 _ p q))
     φ f e        | 1₂ with= p | 1₂ with= q = rec𝟘 _ (φ-𝟘 f e (1₂ , (p , q)))
 
@@ -141,7 +151,7 @@ module OneDimensionalTerms where
               → (l == refl 𝟚) + (l == ua not-eqv)
           φ (i₁ α) = i₁ (ap-path-to-eqv-out {q = refl 𝟚} (α ◾ ! (ua-β (ide 𝟚)) ◾ ap path-to-eqv (ua-ide 𝟚)))
           φ (i₂ α) = i₂ (ap-path-to-eqv-out (α ◾ ! (ua-β not-eqv)))
-          
+
   all-1-paths : (p : `𝟚 == `𝟚) → (p == `id) + (p == `not)
   all-1-paths = φ ∘ all-1-paths-𝟚 ∘ dpair=-e₁
     where φ : {l : `𝟚 == `𝟚} → (dpair=-e₁ l == refl 𝟚) + (dpair=-e₁ l == ua not-eqv)
@@ -150,6 +160,8 @@ module OneDimensionalTerms where
                                             (prop-is-set identify _ _ _ _))
           φ {l} (i₂ α) = i₂ (ap-dpair=-e-out (α ◾ ! (dpair=-β₁ _))
                                              (prop-is-set identify _ _ _ _))
+
+open OneDimensionalTerms public using (all-1-paths)
 
 module TwoDimensionalTerms where
 
@@ -167,59 +179,4 @@ module TwoDimensionalTerms where
   all-2-paths-not : (u : `not == `not) → u == refl `not
   all-2-paths-not u = U[𝟚]-is-1type _ _ _ _ u (refl `not)
 
-
-module ModelsOfP where
-
-  data P₀ : Type₀ where
-    2ₚ : P₀
-
-  M₀ : P₀ → ∥ U[𝟚] ∥₀
-  M₀ 2ₚ = ∣ `𝟚 ∣₀
-
-  M₀-is-equiv : is-equiv M₀
-  M₀-is-equiv = {!!}
-
-  -----
-  
-  data P₁ : Type₀ where
-    idₚ : P₀ → P₁
-    notₚ : P₁
-    _∘ₚ_ : P₁ → P₁ → P₁
-    !ₚ : P₁ → P₁
-
-  -- here the set truncation is unneeded as the space is already a 0-type
-  M₁ : P₁ → Ω U[𝟚] `𝟚
-  M₁ (idₚ 2ₚ) = refl `𝟚
-  M₁ notₚ = `not
-  M₁ (p ∘ₚ q) = M₁ p ◾ M₁ q
-  M₁ (!ₚ p) = ! (M₁ p)
-
-  M₁-is-surj : is-surj M₁
-  M₁-is-surj = {!!}
-
-  -----
-  
-  data P₂ : Type₀ where
-    not∘ₚnot=id : P₂
-    
-    ∘ₚ-unitr : (p : P₁) → P₂
-    ∘ₚ-unitl : (p : P₁) → P₂
-    ∘ₚ-assoc : (p q r : P₁) → P₂ 
-    ∘ₚ-invr : (p : P₁) → P₂
-    ∘ₚ-invl : (p : P₁) → P₂
-
-    -- etcetera
-
-
-  M₂ : P₂ → fib M₁ (refl `𝟚)
-  M₂ not∘ₚnot=id = (notₚ ∘ₚ notₚ) , {!!} -- ρ : `not ◾ `not == refl `𝟚
-  M₂ (∘ₚ-unitr (idₚ x)) = {!!}
-  M₂ (∘ₚ-unitr notₚ) = {!!}
-  M₂ (∘ₚ-unitr (p ∘ₚ p₃)) = {!!}
-  M₂ (∘ₚ-unitr (!ₚ p)) = {!!} 
-  M₂ = {!!}
-
-  M₂-is-surj : is-surj M₂
-  M₂-is-surj = {!!}
-
-  -- fibers of M₁ are homotopy equivalent
+open TwoDimensionalTerms public using (U[𝟚]-is-1type)
