@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K #-}
 module TwoUniverse where
 
 open import UnivalentTypeTheory
@@ -64,7 +64,7 @@ U[𝟚] : Type₁
 U[𝟚] = Σ Type₀ is-𝟚
 
 El[𝟚] : U[𝟚] → Type₀
-El[𝟚] X = 𝟚
+El[𝟚] = p₁
 
 Ũ = Σ U[𝟚] El[𝟚]
 
@@ -95,17 +95,15 @@ notp◾notp=refl = ! (ua-● not-eqv not-eqv)
 
 module ComputationalProperties where
 
-  coe[𝟚] : ∀ {A : U[𝟚]} → (p : A == A) → El[𝟚] A → El[𝟚] A
-  coe[𝟚] = tpt El[𝟚]
+  path-to-eqv[𝟚] : (p : `𝟚 == `𝟚) → 𝟚 → 𝟚
+  path-to-eqv[𝟚] p = p₁ (path-to-eqv (dpair=-e₁ p))
 
-  `id-β : (x : El[𝟚] `𝟚) → coe[𝟚] {`𝟚} `id x == x
-  `id-β x = ap (λ p → coe[𝟚] {`𝟚} p x) {!!} -- ap (λ p → coe[𝟚] p x) dpair≡
-    where dpair≡ : dpair= (refl 𝟚 , identify _ _) == refl (𝟚 , ∣ (refl 𝟚) ∣)
-          dpair≡ = ap (λ p → dpair= (refl 𝟚 , p)) (prop-is-set identify _ _ _ _)
+  `id-β : (x : El[𝟚] `𝟚) → path-to-eqv[𝟚] `id x == x
+  `id-β = refl
 
-  `not-β : (x : El[𝟚] `𝟚) → coe[𝟚] `not x == not x
-  `not-β 0₂ = {!!}
-  `not-β 1₂ = {!!}
+  `not-β : (x : El[𝟚] `𝟚) → path-to-eqv[𝟚] `not x == not x
+  `not-β x = ap (λ p → (p₁ ∘ path-to-eqv) p x) {y = ua not-eqv} (dpair=-β₁ _)
+           ◾ ap (λ p → (p₁ p) x) (ua-β not-eqv)
 
 module ZeroDimensionalTerms where
 
@@ -156,15 +154,15 @@ module OneDimensionalTerms where
   all-1-paths = φ ∘ all-1-paths-𝟚 ∘ dpair=-e₁
     where φ : {l : `𝟚 == `𝟚} → (dpair=-e₁ l == refl 𝟚) + (dpair=-e₁ l == ua not-eqv)
               → (l == `id) + (l == `not)
-          φ {l} (i₁ α) = i₁ (ap-dpair=-e-out (α ◾ ! (dpair=-β₁ _))
-                                            (prop-is-set identify _ _ _ _))
+          φ {l} (i₁ α) = i₁ (ap-dpair=-e-out (α ◾ ! (dpair=-β₁ {P = is-𝟚} {ux = ∣ refl 𝟚 ∣} _))
+                                             (prop-is-set identify _ _ _ _))
           φ {l} (i₂ α) = i₂ (ap-dpair=-e-out (α ◾ ! (dpair=-β₁ _))
                                              (prop-is-set identify _ _ _ _))
 
   open ComputationalProperties
 
   ¬id=not : ¬ (`id == `not)
-  ¬id=not id=not = rec𝟘 _ (0!=1 ((! (`id-β 0₂) ◾ ap (λ p → coe[𝟚] p 0₂) id=not ◾ `not-β 0₂)))
+  ¬id=not id=not = rec𝟘 _ (0!=1 ((! (`id-β 0₂) ◾ ap (λ p → path-to-eqv[𝟚] p 0₂) id=not ◾ `not-β 0₂)))
     where
     0!=1 : ¬ (0₂ == 1₂)
     0!=1 ()
