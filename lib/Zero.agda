@@ -23,9 +23,15 @@ infix 100 ¬
 
 module _ {ℓ} {X : Type ℓ} where
 
-  infixr 30 ≠
-  ≠ : Type ℓ
-  ≠ = {x y : X} → x == y → 𝟘
+  infixr 30 _≠_
+  _≠_ : X → X → Type ℓ
+  x ≠ y = x == y → 𝟘
 
 
 data 𝟘' {ℓ} : Type ℓ where
+
+
+module _ {ℓ} where
+
+  ¬𝟘' : ¬ (𝟘' {ℓ})
+  ¬𝟘' ()
