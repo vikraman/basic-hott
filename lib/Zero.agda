@@ -28,8 +28,10 @@ module _ {ℓ} {X : Type ℓ} where
   x ≠ y = x == y → 𝟘
 
 
-data 𝟘' {ℓ : Level} : Type ℓ where
+data 𝟘' {ℓ} : Type ℓ where
 
 
-¬𝟘' : {ℓ : Level} → ¬ (𝟘' {ℓ})
-¬𝟘' ()
+module _ {ℓ} where
+
+  ¬𝟘' : ¬ (𝟘' {ℓ})
+  ¬𝟘' ()
