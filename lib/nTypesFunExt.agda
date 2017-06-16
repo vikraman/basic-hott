@@ -1,7 +1,14 @@
 {-# OPTIONS --without-K #-}
 module nTypesFunExt where
 
-open import IntensionalTypeTheory
+open import Type
+open import DependentSum
+open import Paths
+open import Homotopies
+open import Equivalences
+open import OneTypes
+open import PathsInSigma
+
 open import FunctionExtensionality
 open import OneTypesFunExt
 open import IsEquivIsProp
