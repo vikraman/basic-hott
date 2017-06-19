@@ -51,6 +51,3 @@ module IndSusp {ℓ₁ ℓ₂} {X : Type ℓ₁} (P : Susp X → Type ℓ₂)
     merid-β : (x : X) → apd P f (merid x) == merid* x
 
 indSusp = IndSusp.f
-
-
-open import S1
