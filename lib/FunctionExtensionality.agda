@@ -1,7 +1,13 @@
 {-# OPTIONS --without-K #-}
 module FunctionExtensionality where
 
-open import IntensionalTypeTheory
+open import Type
+open import Functions
+open import DependentSum
+open import Paths
+open import Homotopies
+open import Equivalences
+open import PathsInSigma
 
 
 postulate

@@ -1,7 +1,17 @@
 {-# OPTIONS --without-K #-}
 module Surjections where
 
-open import IntensionalTypeTheory
+open import Type
+open import Functions
+open import DependentSum
+open import Paths
+open import Homotopies
+open import Equivalences
+open import ContractibleFunctions
+open import OneTypes
+open import nTypes
+open import PathsInSigma
+
 open import PropositionalTruncation
 
 
