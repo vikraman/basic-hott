@@ -14,9 +14,11 @@ module _ {ℓ₁} where
 
   ∥_∥ : Type ℓ₁ → Type ℓ₁
   ∥_∥ = #∥_∥
+  {-# DISPLAY #∥_∥ = ∥_∥ #-}
 
   ∣_∣ : {X : Type ℓ₁} → X → ∥ X ∥
-  ∣_∣ = #∣_∣ 
+  ∣_∣ = #∣_∣
+  {-# DISPLAY #∣_∣ = ∣_∣ #-}
 
   postulate
     identify : {X : Type ℓ₁} → (x y : ∥ X ∥) → x == y
@@ -35,7 +37,7 @@ module _ {ℓ₁} where
              → ((x : X) → P ∣ x ∣) → ((x : ∥ X ∥) → is-prop (P x))
              → (x : ∥ X ∥) → P x
   indTrunc P f φ #∣ x ∣ = f x
-  
+
   indTrunc' : {ℓ₂ : Level} → {X : Type ℓ₁} → (P : ∥ X ∥ → Type ℓ₂)
               → (f : (x : X) → P ∣ x ∣)
               → (φ : (x y : ∥ X ∥) → {ux : P x} → {uy : P y} → tpt P (identify x y) ux == uy)
