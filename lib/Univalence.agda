@@ -16,21 +16,21 @@ postulate
 
 module _ {ℓ} {X Y : Type ℓ} where
 
-  ua : X ≃ Y → X == Y
-  ua = p₁ (univalence X Y)
+  abstract
+    ua : X ≃ Y → X == Y
+    ua = p₁ (univalence X Y)
 
-  -- ua-e is path-to-eqv
-  -- ua-e₁ is (tpt id)
+    -- ua-e is path-to-eqv
+    -- ua-e₁ is (tpt id)
   
-  ua-β : path-to-eqv ∘ ua ∼ id
-  ua-β = p₁ (p₂ (p₂ (univalence X Y)))
+    ua-β : path-to-eqv ∘ ua ∼ id
+    ua-β = p₁ (p₂ (p₂ (univalence X Y)))
 
-  ua-β₁ : tpt id ∘ ua ∼ p₁
-  ua-β₁ = dpair=-e₁ ∘ ua-β
+    ua-β₁ : tpt id ∘ ua ∼ p₁
+    ua-β₁ = dpair=-e₁ ∘ ua-β
 
-  ua-η : ua ∘ path-to-eqv ∼ id
-  ua-η = p₁ (p₂ (univalence X Y))
-
+    ua-η : ua ∘ path-to-eqv ∼ id
+    ua-η = p₁ (p₂ (univalence X Y))
 
 ua-ide : {ℓ : Level} → (X : Type ℓ) → ua (ide X) == refl X
 ua-ide X = ua-η (refl X)
