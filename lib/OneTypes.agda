@@ -92,6 +92,13 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
           adj = λ x → prop-is-set ψ _ _ _ _
 
 
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
+
+  set-eqv : is-set Y → (f : X → Y) → (g : Y → X)
+            → (g ∘ f ∼ id) → (f ∘ g ∼ id) → X ≃ Y
+  set-eqv φ f g η ε = f , g , η , ε , (λ x → φ _ _ (ap f (η x)) (ε (f x))) 
+
+
 module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
   ×-prsrv-contr : {Y : Type ℓ₂} → is-contr X → is-contr Y → is-contr (X × Y)
