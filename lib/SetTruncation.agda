@@ -32,9 +32,11 @@ module _ {ℓ₁} where
 
   ∥_∥₀ : Type ℓ₁ → Type ℓ₁
   ∥_∥₀ = #∥_∥₀
+  {-# DISPLAY #∥_∥₀ = ∥_∥₀ #-}
 
   ∣_∣₀ : {X : Type ℓ₁} → X → ∥ X ∥₀
-  ∣_∣₀ = #∣_∣₀ 
+  ∣_∣₀ = #∣_∣₀
+  {-# DISPLAY #∣_∣₀ = ∣_∣₀ #-}
 
   postulate
     identify₀ : {X : Type ℓ₁} → {x y : ∥ X ∥₀} → (p q : x == y) → p == q
@@ -48,8 +50,8 @@ module _ {ℓ₁} where
                   → (f : X → Y) → (φ : is-set Y)
                   → {x x' : ∥ X ∥₀} → (p q : x == x')
                   → ap (ap (recTrunc₀ Y f φ)) (identify₀ p q) ==
-                     φ _ _ (ap (recTrunc₀ Y f φ) p) (ap (recTrunc₀ Y f φ) q) 
-  
+                     φ _ _ (ap (recTrunc₀ Y f φ) p) (ap (recTrunc₀ Y f φ) q)
+
   indTrunc₀ : {ℓ₂ : Level} → {X : Type ℓ₁} → (P : ∥ X ∥₀ → Type ℓ₂)
               → ((x : X) → P ∣ x ∣₀) → ((x : ∥ X ∥₀) → is-set (P x))
               → (x : ∥ X ∥₀) → P x
