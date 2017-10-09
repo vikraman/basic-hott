@@ -130,8 +130,11 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
   is-hae≃is-contr-fn : (f : X → Y) → is-hae f ≃ is-contr-fn f
   is-hae≃is-contr-fn f = logical-eqv (is-hae-is-prop f) (is-contr-fn-is-prop f) hae-is-contr contr-is-hae
 
-  is-equiv-is-prop : (f : X → Y) → is-prop (is-equiv f)
-  is-equiv-is-prop = is-hae-is-prop
-
-  eqv= : {e e' : X ≃ Y} → p₁ e == p₁ e' → e == e'
-  eqv= {e = e} {e'} φ = dpair= (φ , is-equiv-is-prop _ _ _ )
+module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
+  abstract
+  
+    is-equiv-is-prop : (f : X → Y) → is-prop (is-equiv f)
+    is-equiv-is-prop = is-hae-is-prop
+  
+    eqv= : {e e' : X ≃ Y} → p₁ e == p₁ e' → e == e'
+    eqv= {e = e} {e'} φ = dpair= (φ , is-equiv-is-prop _ _ _ )
