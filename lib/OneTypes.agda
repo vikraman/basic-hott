@@ -148,29 +148,29 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
 module _ {ℓ} where
 
-  K : Type ℓ → Type ℓ
-  K X = (x : X) → (p : x == x) → p == refl x
+  has-K : Type ℓ → Type ℓ
+  has-K X = (x : X) → (p : x == x) → p == refl x
 
 module _ {ℓ} where
 
-  UIP : Type ℓ → Type ℓ
-  UIP = is-set
+  has-UIP : Type ℓ → Type ℓ
+  has-UIP = is-set
 
 module _ {ℓ} {X : Type ℓ} where
 
-  UIP-implies-K : UIP X → K X
+  UIP-implies-K : has-UIP X → has-K X
   UIP-implies-K φ x p = φ x x p (refl x)
 
-  K-implies-UIP : K X → UIP X
+  K-implies-UIP : has-K X → has-UIP X
   K-implies-UIP φ x .x p (refl .x) = φ x p
 
 module _ {ℓ} where
 
-  decidable : Type ℓ → Type ℓ
-  decidable X = X + ¬ X
+  is-dec : Type ℓ → Type ℓ
+  is-dec X = X + ¬ X
 
   has-dec-eq : Type ℓ → Type ℓ
-  has-dec-eq X = (x y : X) → decidable (x == y)
+  has-dec-eq X = (x y : X) → is-dec (x == y)
 
   module _ (X : Type ℓ) (φ : has-dec-eq X) where
 
