@@ -22,7 +22,7 @@ module _ {ℓ} where
 
   is-prop : Type ℓ → Type ℓ
   is-prop X = (x y : X) → x == y
-  
+
   is-set : Type ℓ → Type ℓ
   is-set X = (x y : X) → (p q : x == y) → p == q
 
@@ -34,7 +34,7 @@ module _ {ℓ} {X : Type ℓ} where
 
   contr-is-prop : is-contr X → is-prop X
   contr-is-prop (x₀ , φ) x y = ! (φ x) ◾ φ y
-  
+
   prop-is-set : is-prop X → is-set X
   prop-is-set φ x y p q =
     α ◾ ! β
@@ -96,14 +96,14 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} {Y : Type ℓ₂} where
 
   set-eqv : is-set Y → (f : X → Y) → (g : Y → X)
             → (g ∘ f ∼ id) → (f ∘ g ∼ id) → X ≃ Y
-  set-eqv φ f g η ε = f , g , η , ε , (λ x → φ _ _ (ap f (η x)) (ε (f x))) 
+  set-eqv φ f g η ε = f , g , η , ε , (λ x → φ _ _ (ap f (η x)) (ε (f x)))
 
 
 module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
   ×-prsrv-contr : {Y : Type ℓ₂} → is-contr X → is-contr Y → is-contr (X × Y)
   ×-prsrv-contr (x , f) (y , g) = (x , y) , (λ w → pair= (f (p₁ w) , g (p₂ w)))
-  
+
   Σ-prsrv-contr : {P : X → Type ℓ₂}
                   → is-contr X → ((x : X) → is-contr (P x)) → is-contr (Σ X P)
   Σ-prsrv-contr {P} (x , f) g = (x , p₁ (g x)) , φ
@@ -113,14 +113,14 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
 
   ×-prsrv-prop : {Y : Type ℓ₂} → is-prop X → is-prop Y → is-prop (X × Y)
   ×-prsrv-prop f g (x , y) (x' , y') = pair= (f x x' , g y y')
-  
+
   Σ-prsrv-prop : {P : X → Type ℓ₂}
                  → is-prop X → ((x : X) → is-prop (P x)) → is-prop (Σ X P)
   Σ-prsrv-prop f g (x , y) (x' , y') = dpair= (f x x' , g _ _ _)
 
   ×-prsrv-set : {Y : Type ℓ₂} → is-set X → is-set Y → is-set (X × Y)
   ×-prsrv-set f g (x , y) (x' , y') w w' =
-    ! (pair=-η w) ◾ ap pair= (pair= (α , β)) ◾ pair=-η w' 
+    ! (pair=-η w) ◾ ap pair= (pair= (α , β)) ◾ pair=-η w'
     where p  = ap p₁ w
           q  = ap p₂ w
           p' = ap p₁ w'
@@ -146,3 +146,48 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
   +-prsrv-set φ ψ (i₂ y) (i₁ x ) ()
   +-prsrv-set φ ψ (i₂ y) (i₂ y') p q = ! (i₂=-η p) ◾ ap i₂= (ψ _ _ _ _) ◾ i₂=-η q
 
+module _ {ℓ} where
+
+  has-K : Type ℓ → Type ℓ
+  has-K X = (x : X) → (p : x == x) → p == refl x
+
+module _ {ℓ} where
+
+  has-UIP : Type ℓ → Type ℓ
+  has-UIP = is-set
+
+module _ {ℓ} {X : Type ℓ} where
+
+  UIP-implies-K : has-UIP X → has-K X
+  UIP-implies-K φ x p = φ x x p (refl x)
+
+  K-implies-UIP : has-K X → has-UIP X
+  K-implies-UIP φ x .x p (refl .x) = φ x p
+
+module _ {ℓ} where
+
+  is-dec : Type ℓ → Type ℓ
+  is-dec X = X + ¬ X
+
+  has-dec-eq : Type ℓ → Type ℓ
+  has-dec-eq X = (x y : X) → is-dec (x == y)
+
+  module _ (X : Type ℓ) (φ : has-dec-eq X) where
+
+    stable : {x y : X} → x == y → x == y
+    stable {x} {y} p with φ x y
+    ... | i₁ x=y = x=y
+    ... | i₂ x≠y = p
+
+    stable-const : {x y : X} → (p q : x == y) → stable p == stable q
+    stable-const {x} {y} p q with φ x y
+    ... | i₁ x=y = refl x=y
+    ... | i₂ x≠y = rec𝟘 (p == q) (x≠y q)
+
+    stable-inv : {x y : X} (p : x == y) → ! (stable (refl x)) ◾ stable p == p
+    stable-inv (refl x) = ◾invl (stable (refl x))
+
+    hedberg : is-set X
+    hedberg x y p q = ! (stable-inv p)
+                    ◾ ap (λ r →  ! (stable (refl x)) ◾ r) (stable-const p q)
+                    ◾ stable-inv q

@@ -27,3 +27,21 @@ indℕ P z s (succ n) = s n (indℕ P z s n)
 
 recℕ : ∀ {ℓ} (C : Type ℓ) → C → (ℕ → C → C) → ℕ → C
 recℕ C = indℕ (λ _ → C)
+
+open import Paths
+open import OneTypes
+open import Coproduct
+
+succ-inj : {x y : ℕ} → succ x == succ y → x == y
+succ-inj (refl .(succ _)) = refl _
+
+ℕ-has-dec-eq : has-dec-eq ℕ
+ℕ-has-dec-eq zero zero = i₁ (refl zero)
+ℕ-has-dec-eq zero (succ y) = i₂ (λ ())
+ℕ-has-dec-eq (succ x) zero = i₂ (λ ())
+ℕ-has-dec-eq (succ x) (succ y) with ℕ-has-dec-eq x y
+... | i₁ p = i₁ (ap succ p)
+... | i₂ p = i₂ (λ q → p (succ-inj q))
+
+ℕ-is-set : is-set ℕ
+ℕ-is-set = hedberg ℕ ℕ-has-dec-eq

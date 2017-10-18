@@ -9,10 +9,12 @@ open import Coproduct
 open import Paths
 open import Homotopies
 open import Equivalences
+open import Zero
 open import One
 open import Two
 open import PathsInSigma
 open import PathsInOne
+open import PathsInCoproduct
 open import OneTypes
 open import nTypes
 
@@ -91,15 +93,15 @@ module _ {ℓ₁ ℓ₂ ℓ₃ ℓ₄} {X : Type ℓ₁}
               → Σ (Σ X P) (λ w → Σ (Q (p₁ w) (p₂ w)) (λ z → R (p₁ w) (p₂ w) z))
           f (w , x , y , z) = (w , x) , (y , z)
           g : Σ (Σ X P) (λ w → Σ (Q (p₁ w) (p₂ w)) (λ z → R (p₁ w) (p₂ w) z))
-              → Σ X (λ x → Σ (P x) (λ y → Σ (Q x y) (λ z → R x y z))) 
+              → Σ X (λ x → Σ (P x) (λ y → Σ (Q x y) (λ z → R x y z)))
           g ((w , x) , (y , z)) = w , x , y , z
 
 
 
 
-module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
+module _ {ℓ₁ ℓ₂ ℓ₃} {X : Type ℓ₁} where
 
-  Σ-fib-eqv : {P Q : X → Type ℓ₂} → ((x : X) → P x ≃ Q x) → Σ X P ≃ Σ X Q
+  Σ-fib-eqv : {P : X → Type ℓ₂} {Q : X → Type ℓ₃} → ((x : X) → P x ≃ Q x) → Σ X P ≃ Σ X Q
   Σ-fib-eqv h = f , g , η , ε , τ
     where f' = λ x → p₁ (h x)
           g' = λ x → p₁ (p₂ (h x))
@@ -135,6 +137,8 @@ module _ {ℓ₁ ℓ₂} {X : Type ℓ₁} where
         τ (i₁ 0₁) = refl (refl 0₂)
         τ (i₂ 0₁) = refl (refl 1₂)
 
+0₂≠1₂ : 0₂ ≠ 1₂
+0₂≠1₂ p = ¬𝟘' (i₁=-e (ap (p₁ (p₂ 𝟙+𝟙≃𝟚)) p))
 
 not-is-equiv : is-equiv not
 not-is-equiv = not , η , η , τ
